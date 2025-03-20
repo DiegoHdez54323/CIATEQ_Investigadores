@@ -99,16 +99,6 @@ class Usuarios(models.Model):
 # ============ 2. Modelos que dependen de otros ============
 
 
-class Snii(models.Model):
-    id = models.AutoField(primary_key=True)
-    nivel = models.ForeignKey(NivelSnii, on_delete=models.CASCADE)
-    fecha_asignacion = models.DateField()
-
-    class Meta:
-        managed = False
-        db_table = "snii"
-
-
 class Investigador(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
@@ -116,11 +106,21 @@ class Investigador(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     correo = models.CharField(unique=True, max_length=100)
     sueldo = models.DecimalField(max_digits=10, decimal_places=2)
-    snii = models.OneToOneField(Snii, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "investigador"
+
+
+class Snii(models.Model):
+    id = models.AutoField(primary_key=True)
+    investigador = models.OneToOneField(Investigador, on_delete=models.CASCADE)
+    nivel = models.ForeignKey(NivelSnii, on_delete=models.CASCADE)
+    fecha_asignacion = models.DateField()
+
+    class Meta:
+        managed = True
+        db_table = "snii"
 
 
 class Eventos(models.Model):

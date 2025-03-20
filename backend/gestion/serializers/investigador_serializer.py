@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Investigador
+from gestion.models import Investigador
 
 
 class InvestigadorSerializer(serializers.ModelSerializer):
