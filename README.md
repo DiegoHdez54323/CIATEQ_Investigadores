@@ -29,7 +29,7 @@ Este proyecto consiste en una plataforma web para la gestión de investigadores,
    pip install -r requirements.txt
    ```
 
-4. Ajustar las credenciales de la BD en `settings.py` según tu configuración local.
+4. Ajustar las credenciales de la BD en `settings.py` según tu configuración local, y aplicar las migraciones.
 
 5. Ejecutar el servidor backend:
 
