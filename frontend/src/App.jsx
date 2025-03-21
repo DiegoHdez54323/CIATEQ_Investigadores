@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
-import { fetchData } from "./api/api";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./pages/Login";
+import Menu from "./pages/Menu";
 
 function App() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    fetchData().then(setData);
-  }, []);
-
   return (
-    <div>
-      <h1>Datos desde Django</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/menu" element={<Menu />} />
+        {/* Redirige cualquier ruta desconocida a /login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
