@@ -55,6 +55,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "http://localhost:5174",
 ]
 
 ROOT_URLCONF = "main.urls"
@@ -84,7 +85,7 @@ WSGI_APPLICATION = "main.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "ciateq_investigadores",
+        "NAME": "ciateq_investigadores_django",
         "USER": "postgres",
         "PASSWORD": "techboy54323",
         "HOST": "localhost",

@@ -9,7 +9,7 @@ class Carreras(models.Model):
     nombre = models.CharField(unique=True, max_length=100)
 
     class Meta:
-        managed = False
+
         db_table = "carreras"
 
 
@@ -18,7 +18,7 @@ class NivelSnii(models.Model):
     descripcion = models.CharField(max_length=50)
 
     class Meta:
-        managed = False
+
         db_table = "nivel_snii"
 
 
@@ -27,7 +27,6 @@ class TipoEstudiante(models.Model):
     descripcion = models.CharField(unique=True, max_length=50)
 
     class Meta:
-        managed = False
         db_table = "tipo_estudiante"
 
 
@@ -36,7 +35,6 @@ class TipoEvento(models.Model):
     descripcion = models.CharField(unique=True, max_length=50)
 
     class Meta:
-        managed = False
         db_table = "tipo_evento"
 
 
@@ -45,7 +43,6 @@ class Herramientas(models.Model):
     descripcion = models.CharField(unique=True, max_length=100)
 
     class Meta:
-        managed = False
         db_table = "herramientas"
 
 
@@ -54,7 +51,6 @@ class Lineas(models.Model):
     descripcion = models.CharField(unique=True, max_length=50)
 
     class Meta:
-        managed = False
         db_table = "lineas"
 
 
@@ -69,7 +65,6 @@ class Articulos(models.Model):
     anio_publicacion = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "articulos"
 
 
@@ -81,7 +76,6 @@ class Proyectos(models.Model):
     ingresos = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        managed = False
         db_table = "proyectos"
 
 
@@ -92,7 +86,6 @@ class Usuarios(models.Model):
     role = models.CharField(max_length=50)
 
     class Meta:
-        managed = False
         db_table = "usuarios"
 
 
@@ -108,7 +101,6 @@ class Investigador(models.Model):
     sueldo = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        managed = True
         db_table = "investigador"
 
 
@@ -119,7 +111,6 @@ class Snii(models.Model):
     fecha_asignacion = models.DateField()
 
     class Meta:
-        managed = True
         db_table = "snii"
 
 
@@ -133,7 +124,6 @@ class Eventos(models.Model):
     empresa_invita = models.CharField(max_length=200)
 
     class Meta:
-        managed = False
         db_table = "eventos"
 
 
@@ -145,11 +135,10 @@ class Estudiante(models.Model):
     escuela = models.CharField(max_length=100)
     fecha_inicio = models.DateField()
     fecha_termino = models.DateField()
-    sueldo = models.DecimalField(max_digits=10, decimal_places=2)
+    sueldo = models.DecimalField(max_digits=10, decimal_places=2, default=3200.00)
     nombre = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "estudiante"
 
 
@@ -163,7 +152,6 @@ class DetArt(models.Model):
     es_principal = models.BooleanField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "det_art"
         unique_together = (("investigador", "articulo"),)
 
@@ -174,7 +162,6 @@ class DetEventos(models.Model):
     evento = models.ForeignKey(Eventos, on_delete=models.CASCADE)
 
     class Meta:
-        managed = False
         db_table = "det_eventos"
         unique_together = (("investigador", "evento"),)
 
@@ -185,7 +172,6 @@ class DetHerr(models.Model):
     herramienta = models.ForeignKey(Herramientas, on_delete=models.CASCADE)
 
     class Meta:
-        managed = False
         db_table = "det_herr"
         unique_together = (("proyecto", "herramienta"),)
 
@@ -196,7 +182,6 @@ class DetLineas(models.Model):
     linea = models.ForeignKey(Lineas, on_delete=models.CASCADE)
 
     class Meta:
-        managed = False
         db_table = "det_lineas"
         unique_together = (("investigador", "linea"),)
 
@@ -208,6 +193,5 @@ class DetProy(models.Model):
     es_principal = models.BooleanField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = "det_proy"
         unique_together = (("investigador", "proyecto"),)
