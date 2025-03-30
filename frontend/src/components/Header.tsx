@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({
         </button>
         <div className="relative">
           <h1 className="text-2xl font-bold text-slate-800">{title}</h1>
-          <div className="absolute -bottom-1 left-0 h-1 w-12 rounded-full bg-indigo-500"></div>
+          <div className="absolute -bottom-2 left-0 h-1 w-12 rounded-full bg-red-800"></div>
         </div>
       </div>
     </header>

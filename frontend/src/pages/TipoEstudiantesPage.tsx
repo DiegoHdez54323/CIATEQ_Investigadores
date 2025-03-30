@@ -75,7 +75,7 @@ const TipoEstudiantePage: React.FC = () => {
           <h2 className="text-xl font-bold">Listado de Tipos de Estudiante</h2>
           <button
             onClick={handleNew}
-            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
           >
             Nuevo Tipo Estudiante
           </button>

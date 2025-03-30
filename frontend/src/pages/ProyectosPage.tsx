@@ -4,6 +4,9 @@ import List, { Column } from "../components/List";
 import ProyectoForm from "../components/forms/ProyectoForm";
 import { useModal } from "../context/ModalContext";
 import useCrudActions from "../hooks/useCrudActions";
+import SortButton from "../components/SortButton";
+import { withOrderingAndFilter } from "../hoc/withOrderingAndFilter";
+import { buildUrl } from "../utils/buildUrl";
 
 interface Proyecto {
   id: number;
@@ -13,10 +16,23 @@ interface Proyecto {
   ingresos: number;
 }
 
-const API_URL = "http://127.0.0.1:8000/gestion/api/proyectos/";
+interface ProyectosPageProps {
+  ordering: string;
+  toggleOrdering: (field: string) => void;
+  filters: { [key: string]: string | null };
+  setFilter: (field: string, value: string | null) => void;
+  clearFilters: () => void;
+}
 
-const ProyectosPage: React.FC = () => {
-  // Hook CRUD para proyectos
+const BASE_API_URL = "http://127.0.0.1:8000/gestion/api/proyectos/";
+
+const ProyectosPage: React.FC<ProyectosPageProps> = ({
+  ordering,
+  toggleOrdering,
+}) => {
+  // Construimos la URL usando buildUrl; en este caso, solo se utiliza ordering.
+  const API_URL = buildUrl(BASE_API_URL, { ordering: ordering });
+
   const {
     data: proyectos,
     loading,
@@ -30,15 +46,13 @@ const ProyectosPage: React.FC = () => {
     handleEdit,
   } = useCrudActions<Proyecto>(API_URL);
 
-  // Hook para abrir/cerrar el modal global
   const { openModal, closeModal } = useModal();
 
-  // Al montar el componente, cargamos la lista de proyectos
+  // Vuelve a obtener los datos cada vez que cambia la ordenación
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [ordering]);
 
-  // Crear un proyecto nuevo
   const handleNew = () => {
     setEditingItem(null);
     openModal(
@@ -54,7 +68,6 @@ const ProyectosPage: React.FC = () => {
     );
   };
 
-  // Editar un proyecto existente
   const handleEditModal = (item: Proyecto) => {
     setEditingItem(item);
     openModal(
@@ -70,13 +83,60 @@ const ProyectosPage: React.FC = () => {
     );
   };
 
-  // Definición de columnas para la lista
   const columns: Column<Proyecto>[] = [
-    { header: "ID", accessor: "id" },
+    {
+      header: (
+        <div className="flex items-center">
+          <span>ID</span>
+          <SortButton
+            field="id"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "id",
+    },
     { header: "Nombre", accessor: "nombre" },
-    { header: "Fecha Inicio", accessor: "fecha_inicio" },
-    { header: "Fecha Término", accessor: "fecha_termino" },
-    { header: "Ingresos", accessor: "ingresos" },
+    {
+      header: (
+        <div className="flex items-center">
+          <span>Fecha Inicio</span>
+          <SortButton
+            field="fecha_inicio"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "fecha_inicio",
+    },
+    {
+      header: (
+        <div className="flex items-center">
+          <span>Fecha Término</span>
+          <SortButton
+            field="fecha_termino"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "fecha_termino",
+    },
+    {
+      header: (
+        <div className="flex items-center">
+          <span>Ingresos</span>
+          <SortButton
+            field="ingresos"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "ingresos",
+    },
   ];
 
   return (
@@ -86,7 +146,7 @@ const ProyectosPage: React.FC = () => {
           <h2 className="text-xl font-bold">Listado de Proyectos</h2>
           <button
             onClick={handleNew}
-            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
           >
             Nuevo Proyecto
           </button>
@@ -102,7 +162,7 @@ const ProyectosPage: React.FC = () => {
             data={proyectos}
             rowKey="id"
             onEdit={(item) => {
-              handleEdit(item); // por si usas la misma lógica que en Articulos
+              handleEdit(item);
               handleEditModal(item);
             }}
             onDelete={(item) => {
@@ -117,4 +177,4 @@ const ProyectosPage: React.FC = () => {
   );
 };
 
-export default ProyectosPage;
+export default withOrderingAndFilter(ProyectosPage);

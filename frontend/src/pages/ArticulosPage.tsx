@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import ArticuloForm from "../components/forms/ArticuloForm";
 import { useModal } from "../context/ModalContext";
 import useCrudActions from "../hooks/useCrudActions";
+import SortButton from "../components/SortButton";
+import { buildUrl } from "../utils/buildUrl";
+import { withOrderingAndFilter } from "../hoc/withOrderingAndFilter";
 
 interface Articulo {
   id: number;
@@ -16,9 +19,24 @@ interface Articulo {
   anio_publicacion: number | null;
 }
 
-const API_URL = "http://127.0.0.1:8000/gestion/api/articulos/";
+const BASE_API_URL = "http://127.0.0.1:8000/gestion/api/articulos/";
 
-const ArticulosPage: React.FC = () => {
+// Las props inyectadas por el HOC withOrderingAndMultiFilter
+interface ArticulosPageProps {
+  ordering: string;
+  toggleOrdering: (field: string) => void;
+  filters: { [key: string]: string | null };
+  setFilter: (field: string, value: string | null) => void;
+  clearFilters: () => void;
+}
+
+const ArticulosPageComponent: React.FC<ArticulosPageProps> = ({
+  ordering,
+  toggleOrdering,
+}) => {
+  // Construir la URL combinando ordering; no usamos filtros, así que se dejan vacíos.
+  const apiUrl = buildUrl(BASE_API_URL, { ordering });
+
   const {
     data: articulos,
     loading,
@@ -30,13 +48,13 @@ const ArticulosPage: React.FC = () => {
     editingItem,
     setEditingItem,
     handleEdit,
-  } = useCrudActions<Articulo>(API_URL);
+  } = useCrudActions<Articulo>(apiUrl);
 
   const { openModal, closeModal } = useModal();
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [ordering]);
 
   const handleNew = () => {
     setEditingItem(null);
@@ -69,13 +87,74 @@ const ArticulosPage: React.FC = () => {
   };
 
   const columns: Column<Articulo>[] = [
+    {
+      header: (
+        <div className="flex items-center">
+          <span>ID</span>
+          <SortButton
+            field="id"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "id",
+    },
     { header: "Nombre", accessor: "nombre" },
-    { header: "Fecha Publicación", accessor: "fecha_publicacion" },
+    {
+      header: (
+        <div className="flex items-center">
+          <span>Fecha Publicación</span>
+          <SortButton
+            field="fecha_publicacion"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "fecha_publicacion",
+    },
     { header: "DOI", accessor: "doi" },
     { header: "URL", accessor: "url" },
-    { header: "Nombre Revista", accessor: "nombre_revista" },
-    { header: "País Publicación", accessor: "pais_publicacion" },
-    { header: "Año Publicación", accessor: "anio_publicacion" },
+    {
+      header: (
+        <div className="flex items-center">
+          <span>Nombre Revista</span>
+          <SortButton
+            field="nombre_revista"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "nombre_revista",
+    },
+    {
+      header: (
+        <div className="flex items-center">
+          <span>País Publicación</span>
+          <SortButton
+            field="pais_publicacion"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "pais_publicacion",
+    },
+    {
+      header: (
+        <div className="flex items-center">
+          <span>Año Publicación</span>
+          <SortButton
+            field="anio_publicacion"
+            ordering={ordering}
+            toggleOrdering={toggleOrdering}
+          />
+        </div>
+      ),
+      accessor: "anio_publicacion",
+    },
   ];
 
   return (
@@ -85,7 +164,7 @@ const ArticulosPage: React.FC = () => {
           <h2 className="text-xl font-bold">Listado de Artículos</h2>
           <button
             onClick={handleNew}
-            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
           >
             Nuevo Artículo
           </button>
@@ -114,4 +193,4 @@ const ArticulosPage: React.FC = () => {
   );
 };
 
-export default ArticulosPage;
+export default withOrderingAndFilter(ArticulosPageComponent, "id", {});

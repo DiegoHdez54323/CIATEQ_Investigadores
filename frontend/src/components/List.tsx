@@ -1,28 +1,15 @@
 import React from "react";
 
 export interface Column<T> {
-  /** Título que se muestra en el encabezado de la columna */
-  header: string;
-  /**
-   * Accesor o función que define cómo extraer el valor a mostrar.
-   * Puede ser la clave de la propiedad del objeto o una función personalizada.
-   */
+  header: React.ReactNode;
   accessor: keyof T | ((item: T) => React.ReactNode);
 }
 
 export interface ListProps<T> {
-  /** Definición de columnas para la lista */
   columns: Column<T>[];
-  /** Datos a mostrar en la lista */
   data: T[];
-  /**
-   * Propiedad o función que retorna la key única para cada fila.
-   * Si no se provee, se usará el índice de la fila.
-   */
   rowKey?: keyof T | ((item: T) => string);
-  /** Función a ejecutar al editar un elemento (opcional) */
   onEdit?: (item: T) => void;
-  /** Función a ejecutar al eliminar un elemento (opcional) */
   onDelete?: (item: T) => void;
 }
 
