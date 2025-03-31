@@ -16,3 +16,4 @@ from .carreras_viewset import CarrerasViewSet
 from .tipo_estudiante_viewset import TipoEstudianteViewSet
 from .estudiantes_viewset import EstudiantesViewSet
 from .usuarios_viewset import UsuariosViewSet
+from .dashboard_view import dashboard_data

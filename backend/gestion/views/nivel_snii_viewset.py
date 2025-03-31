@@ -1,9 +1,8 @@
 from rest_framework import viewsets
-from rest_framework.viewsets import ReadOnlyModelViewSet
 from gestion.models import NivelSnii
 from gestion.serializers import NivelSniiSerializer
 
 
-class NivelSniiViewSet(ReadOnlyModelViewSet):
+class NivelSniiViewSet(viewsets.ModelViewSet):
     queryset = NivelSnii.objects.all()
     serializer_class = NivelSniiSerializer
