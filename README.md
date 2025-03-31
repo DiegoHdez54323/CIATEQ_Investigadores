@@ -9,10 +9,10 @@ Este proyecto consiste en una plataforma web para la **gestión de investigadore
 ### Backend
 
 - **Python** con:
-  - Django==5.1.7
-  - djangorestframework==3.15.2
-  - django-filter==25.1
-  - django-cors-headers==4.7.0
+  - Django
+  - djangorestframework
+  - django-filter
+  - django-cors-headers
 
 ### Frontend
 
