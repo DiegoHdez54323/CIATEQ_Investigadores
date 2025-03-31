@@ -1,63 +1,105 @@
 # Proyecto CIATEQ Investigadores
 
-Este proyecto consiste en una plataforma web para la gestión de investigadores, proyectos, estudiantes, publicaciones y eventos dentro de un centro de investigación.
+Este proyecto consiste en una plataforma web para la **gestión de investigadores, proyectos, estudiantes, publicaciones y eventos** dentro de un centro de investigación.
 
-## Instalación y ejecución en entorno de desarrollo
+---
+
+## 🚀 Tecnologías utilizadas
 
 ### Backend
 
-1. Crear un entorno virtual:
-
-   ```sh
-   python -m venv venv
-   ```
-
-2. Activar el entorno virtual:
-
-   - En Windows:
-     ```sh
-     venv\Scripts\activate
-     ```
-   - En macOS/Linux:
-     ```sh
-     source venv/bin/activate
-     ```
-
-3. Instalar las dependencias:
-
-   ```sh
-   pip install -r requirements.txt
-   ```
-
-4. Ajustar las credenciales de la BD en `settings.py` según tu configuración local, y aplicar las migraciones.
-
-5. Ejecutar el servidor backend:
-
-   ```sh
-   cd backend
-   python manage.py runserver
-   ```
-
-   La API estará disponible en: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+- **Python** con:
+  - Django==5.1.7
+  - djangorestframework==3.15.2
+  - django-filter==25.1
+  - django-cors-headers==4.7.0
 
 ### Frontend
 
+- React
+- Vite
+- Tailwind CSS
+- Lucide React Icons
+
+---
+
+## ⚙️ Instrucciones para desarrollo
+
+### Backend (Django API)
+
+1. Crear un entorno virtual (opcional pero recomendado):
+
+```bash
+python -m venv env
+source env/bin/activate  # o env\Scripts\activate en Windows
+```
+
+2. Instalar las dependencias:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Configurar la base de datos en `backend/main/settings.py` según tus credenciales locales:
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'nombre_basededatos',
+        'USER': 'usuario',
+        'PASSWORD': 'contraseña',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+```
+
+4. Aplicar migraciones:
+
+```bash
+python manage.py migrate
+```
+
+5. Iniciar el servidor backend:
+
+```bash
+cd backend
+python manage.py runserver
+```
+
+6. La API estará disponible en:
+
+```
+http://127.0.0.1:8000/
+```
+
+---
+
+### Frontend (React)
+
 1. Ir a la carpeta del frontend:
 
-   ```sh
-   cd frontend
-   ```
+```bash
+cd frontend
+```
 
-2. Instalar las dependencias del frontend:
+2. Instalar las dependencias:
 
-   ```sh
-   npm install
-   ```
+```bash
+npm install
+```
 
-3. Levantar el servidor de desarrollo:
+3. Iniciar el servidor de desarrollo:
 
-   ```sh
-   npm run dev
-   ```
+```bash
+npm run dev
+```
 
-   La aplicación estará disponible en: [http://localhost:5173](http://localhost:5173)
+4. La aplicación estará disponible en:
+
+```
+http://localhost:5173/
+```
+
+---
