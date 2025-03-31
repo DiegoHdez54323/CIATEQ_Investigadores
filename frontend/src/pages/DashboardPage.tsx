@@ -10,6 +10,8 @@ import {
   Calendar,
   Newspaper,
 } from "lucide-react";
+import MetricCard from "../components/MetricCard";
+import QuickLinkCard from "../components/QuickLinkCard";
 
 interface DashboardData {
   investigadores: number;
@@ -41,22 +43,6 @@ const DashboardPage: React.FC = () => {
       });
   }, []);
 
-  const metricCard = (
-    title: string,
-    value: number | string,
-    icon: React.ReactNode
-  ) => (
-    <div className="bg-white rounded-2xl shadow-md p-5 flex items-center justify-between">
-      <div>
-        <h4 className="text-sm text-gray-500 font-semibold">{title}</h4>
-        <p className="text-2xl font-bold text-gray-800">{value}</p>
-      </div>
-      <div className="text-indigo-700 bg-indigo-100 p-2 rounded-full">
-        {icon}
-      </div>
-    </div>
-  );
-
   return (
     <Layout title="Dashboard">
       <div className="p-6 space-y-8">
@@ -77,56 +63,56 @@ const DashboardPage: React.FC = () => {
           <p className="text-center text-gray-500">Cargando métricas...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {metricCard(
-              "Investigadores",
-              data?.investigadores ?? 0,
-              <Users className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Proyectos (Totales)",
-              data?.proyectos_total ?? 0,
-              <BarChart3 className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Proyectos este año",
-              data?.proyectos_este_anio ?? 0,
-              <BarChart3 className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Artículos este año",
-              data?.articulos_este_anio ?? 0,
-              <Newspaper className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Artículos este mes",
-              data?.articulos_este_mes ?? 0,
-              <FileText className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Estudiantes",
-              data?.estudiantes ?? 0,
-              <GraduationCap className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Est. terminan este año",
-              data?.estudiantes_terminan_este_anio ?? 0,
-              <GraduationCap className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Eventos totales",
-              data?.eventos_total ?? 0,
-              <Calendar className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Eventos este año",
-              data?.eventos_este_anio ?? 0,
-              <Calendar className="w-6 h-6" />
-            )}
-            {metricCard(
-              "Eventos próximos",
-              data?.eventos_proximos ?? 0,
-              <Calendar className="w-6 h-6" />
-            )}
+            <MetricCard
+              title="Investigadores"
+              value={data?.investigadores ?? 0}
+              icon={<Users className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Proyectos (Totales)"
+              value={data?.proyectos_total ?? 0}
+              icon={<BarChart3 className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Proyectos este año"
+              value={data?.proyectos_este_anio ?? 0}
+              icon={<BarChart3 className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Artículos este año"
+              value={data?.articulos_este_anio ?? 0}
+              icon={<Newspaper className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Artículos este mes"
+              value={data?.articulos_este_mes ?? 0}
+              icon={<FileText className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Estudiantes"
+              value={data?.estudiantes ?? 0}
+              icon={<GraduationCap className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Est. terminan este año"
+              value={data?.estudiantes_terminan_este_anio ?? 0}
+              icon={<GraduationCap className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Eventos totales"
+              value={data?.eventos_total ?? 0}
+              icon={<Calendar className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Eventos este año"
+              value={data?.eventos_este_anio ?? 0}
+              icon={<Calendar className="w-6 h-6" />}
+            />
+            <MetricCard
+              title="Eventos próximos"
+              value={data?.eventos_proximos ?? 0}
+              icon={<Calendar className="w-6 h-6" />}
+            />
           </div>
         )}
 
@@ -136,62 +122,36 @@ const DashboardPage: React.FC = () => {
             Accesos rápidos
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link to="/investigadores">
-              <div className="bg-white shadow-lg rounded-xl p-5 hover:bg-indigo-50 transition-colors cursor-pointer">
-                <h3 className="text-lg font-semibold text-gray-700">
-                  Investigadores
-                </h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  Gestiona los investigadores registrados.
-                </p>
-              </div>
-            </Link>
-            <Link to="/proyectos">
-              <div className="bg-white shadow-lg rounded-xl p-5 hover:bg-indigo-50 transition-colors cursor-pointer">
-                <h3 className="text-lg font-semibold text-gray-700">
-                  Proyectos
-                </h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  Administra y consulta los proyectos.
-                </p>
-              </div>
-            </Link>
-            <Link to="/articulos">
-              <div className="bg-white shadow-lg rounded-xl p-5 hover:bg-indigo-50 transition-colors cursor-pointer">
-                <h3 className="text-lg font-semibold text-gray-700">
-                  Artículos
-                </h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  Revisa los artículos publicados.
-                </p>
-              </div>
-            </Link>
-            <Link to="/eventos">
-              <div className="bg-white shadow-lg rounded-xl p-5 hover:bg-indigo-50 transition-colors cursor-pointer">
-                <h3 className="text-lg font-semibold text-gray-700">Eventos</h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  Gestiona los eventos registrados.
-                </p>
-              </div>
-            </Link>
-            <Link to="/estudiantes">
-              <div className="bg-white shadow-lg rounded-xl p-5 hover:bg-indigo-50 transition-colors cursor-pointer">
-                <h3 className="text-lg font-semibold text-gray-700">
-                  Estudiantes
-                </h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  Consulta y administra estudiantes.
-                </p>
-              </div>
-            </Link>
-            <Link to="/snii">
-              <div className="bg-white shadow-lg rounded-xl p-5 hover:bg-indigo-50 transition-colors cursor-pointer">
-                <h3 className="text-lg font-semibold text-gray-700">Snii</h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  Consulta el registro Snii.
-                </p>
-              </div>
-            </Link>
+            <QuickLinkCard
+              to="/investigadores"
+              title="Investigadores"
+              description="Gestiona los investigadores registrados."
+            />
+            <QuickLinkCard
+              to="/proyectos"
+              title="Proyectos"
+              description="Administra y consulta los proyectos."
+            />
+            <QuickLinkCard
+              to="/articulos"
+              title="Artículos"
+              description="Revisa los artículos publicados."
+            />
+            <QuickLinkCard
+              to="/eventos"
+              title="Eventos"
+              description="Gestiona los eventos registrados."
+            />
+            <QuickLinkCard
+              to="/estudiantes"
+              title="Estudiantes"
+              description="Consulta y administra estudiantes."
+            />
+            <QuickLinkCard
+              to="/snii"
+              title="Snii"
+              description="Consulta el registro Snii."
+            />
           </div>
         </div>
       </div>
