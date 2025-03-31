@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -86,10 +86,8 @@ const DetProyPageComponent: React.FC<DetProyPageProps> = ({
   const { openModal, closeModal } = useModal();
 
   // Estados locales para obtener las listas de opciones (se mantienen porque son datos para dropdowns)
-  const [investigadores, setInvestigadores] = React.useState<Investigador[]>(
-    []
-  );
-  const [proyectos, setProyectos] = React.useState<Proyecto[]>([]);
+  const [investigadores, setInvestigadores] = useState<Investigador[]>([]);
+  const [proyectos, setProyectos] = useState<Proyecto[]>([]);
 
   const fetchInvestigadores = async () => {
     try {
@@ -284,8 +282,4 @@ const DetProyPageComponent: React.FC<DetProyPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(DetProyPageComponent, "id", {
-  investigador: null,
-  proyecto: null,
-  es_principal: null,
-});
+export default withOrderingAndFilter(DetProyPageComponent);

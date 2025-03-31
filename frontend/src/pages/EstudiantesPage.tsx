@@ -105,13 +105,9 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
 
   // Estados para obtener las listas de opciones para filtros y para el formulario
   // (Se mantienen locales, pues estos arrays se usan para poblar dropdowns)
-  const [investigadores, setInvestigadores] = React.useState<Investigador[]>(
-    []
-  );
-  const [carreras, setCarreras] = React.useState<Carrera[]>([]);
-  const [tiposEstudiante, setTiposEstudiante] = React.useState<
-    TipoEstudiante[]
-  >([]);
+  const [investigadores, setInvestigadores] = useState<Investigador[]>([]);
+  const [carreras, setCarreras] = useState<Carrera[]>([]);
+  const [tiposEstudiante, setTiposEstudiante] = useState<TipoEstudiante[]>([]);
 
   const fetchInvestigadores = async () => {
     try {

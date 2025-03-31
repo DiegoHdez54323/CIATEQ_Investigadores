@@ -1,3 +1,4 @@
+// src/pages/EventosPage.tsx
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
@@ -80,7 +81,8 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
 
   const { openModal, closeModal } = useModal();
 
-  const [tipoEventos, setTipoEventos] = React.useState<TipoEvento[]>([]);
+  // Estado para la lista de tipos de evento
+  const [tipoEventos, setTipoEventos] = useState<TipoEvento[]>([]);
 
   const fetchTipoEventos = async () => {
     try {
@@ -262,6 +264,4 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(EventosPageComponent, "id", {
-  tipo_evento: null,
-});
+export default withOrderingAndFilter(EventosPageComponent);
