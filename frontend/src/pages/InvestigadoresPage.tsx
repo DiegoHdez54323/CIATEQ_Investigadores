@@ -31,6 +31,23 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
   ordering,
   toggleOrdering,
 }) => {
+  // verifica si la sesion está iniciada, si no redirige a login
+  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  if (!isLoggedIn) {
+    alert("Inicia sesión para acceder a esta página.");
+    window.location.href = "/login"; // Redirigir a otra página
+  }
+  
+  // Estado para controlar si el usuario es administrador
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Verificar el rol del usuario cuando el componente se monta
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    const sesionRole = sessionStorage.getItem("userRole");
+    setIsAdmin(userRole === "admin" || sesionRole == "admin");
+  }, []);
+
   // Construimos la URL dinámica con el parámetro de ordenación
   const apiUrl = buildUrl(BASE_API_URL, { ordering: ordering });
 
@@ -56,6 +73,9 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
   }, [ordering]);
 
   const handleNew = () => {
+    // Solo permitir si el usuario es admin
+    if (!isAdmin) return;
+    
     setEditingItem(null);
     openModal(
       <InvestigadorForm
@@ -71,6 +91,9 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
   };
 
   const handleEditModal = (item: Investigador) => {
+    // Solo permitir si el usuario es admin
+    if (!isAdmin) return;
+    
     setEditingItem(item);
     openModal(
       <InvestigadorForm
@@ -124,12 +147,14 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Listado de Investigadores</h2>
-          <button
-            onClick={handleNew}
-            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
-          >
-            Nuevo Investigador
-          </button>
+          {isAdmin && (
+            <button
+              onClick={handleNew}
+              className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
+            >
+              Nuevo Investigador
+            </button>
+          )}
         </div>
         {loading ? (
           <p>Cargando...</p>
@@ -140,17 +165,17 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
             columns={columns}
             data={investigadores}
             rowKey="id"
-            onEdit={(item) => {
+            onEdit={isAdmin ? (item) => {
               handleEdit(item);
               handleEditModal(item);
-            }}
-            onDelete={(item) => {
+            } : undefined}
+            onDelete={isAdmin ? (item) => {
               if (
                 window.confirm("¿Estás seguro de eliminar este investigador?")
               ) {
                 remove(item.id);
               }
-            }}
+            } : undefined}
           />
         )}
       </div>

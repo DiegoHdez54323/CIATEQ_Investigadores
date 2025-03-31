@@ -118,7 +118,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
             <ul className="space-y-2">
               {navItems.map((item) => (
                 // Mostrar solo los elementos que son permitidos para el usuario
-                (userRole === "Administrador" || (!item.name.includes("Tipo") && !item.name.includes("Asignación"))) && (
+                (userRole === "Administrador" || (!item.name.includes("Tipo") && !item.name.includes("Asignación") && !["Nivel Snii", "Carreras", "Herramientas", "Líneas"].includes(item.name))) && (
                   <li key={item.name}>
                     <Link
                       to={item.to}

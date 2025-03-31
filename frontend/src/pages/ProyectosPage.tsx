@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import ProyectoForm from "../components/forms/ProyectoForm";
@@ -30,6 +30,23 @@ const ProyectosPage: React.FC<ProyectosPageProps> = ({
   ordering,
   toggleOrdering,
 }) => {
+  // verifica si la sesion está iniciada, si no redirige a login
+  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  if (!isLoggedIn) {
+    alert("Inicia sesión para acceder a esta página.");
+    window.location.href = "/login"; // Redirigir a otra página
+  }
+  
+  // Estado para controlar si el usuario es administrador
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Verificar el rol del usuario cuando el componente se monta
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    const sesionRole = sessionStorage.getItem("userRole");
+    setIsAdmin(userRole === "admin" || sesionRole == "admin");
+  }, []);
+
   // Construimos la URL usando buildUrl; en este caso, solo se utiliza ordering.
   const API_URL = buildUrl(BASE_API_URL, { ordering: ordering });
 
@@ -54,6 +71,9 @@ const ProyectosPage: React.FC<ProyectosPageProps> = ({
   }, [ordering]);
 
   const handleNew = () => {
+    // Solo permitir si el usuario es admin
+    if (!isAdmin) return;
+    
     setEditingItem(null);
     openModal(
       <ProyectoForm
@@ -69,6 +89,9 @@ const ProyectosPage: React.FC<ProyectosPageProps> = ({
   };
 
   const handleEditModal = (item: Proyecto) => {
+    // Solo permitir si el usuario es admin
+    if (!isAdmin) return;
+    
     setEditingItem(item);
     openModal(
       <ProyectoForm
@@ -144,12 +167,14 @@ const ProyectosPage: React.FC<ProyectosPageProps> = ({
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Listado de Proyectos</h2>
-          <button
-            onClick={handleNew}
-            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
-          >
-            Nuevo Proyecto
-          </button>
+          {isAdmin && (
+            <button
+              onClick={handleNew}
+              className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
+            >
+              Nuevo Proyecto
+            </button>
+          )}
         </div>
 
         {loading ? (
@@ -161,15 +186,15 @@ const ProyectosPage: React.FC<ProyectosPageProps> = ({
             columns={columns}
             data={proyectos}
             rowKey="id"
-            onEdit={(item) => {
+            onEdit={isAdmin ? (item) => {
               handleEdit(item);
               handleEditModal(item);
-            }}
-            onDelete={(item) => {
+            } : undefined}
+            onDelete={isAdmin ? (item) => {
               if (window.confirm("¿Estás seguro de eliminar este proyecto?")) {
                 remove(item.id);
               }
-            }}
+            } : undefined}
           />
         )}
       </div>

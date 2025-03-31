@@ -49,6 +49,19 @@ const DetLineasPageComponent: React.FC<DetLineasPageProps> = ({
   setFilter,
   clearFilters,
 }) => {
+  // verifica si la sesion está iniciada, si no redirige a login
+  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  if (!isLoggedIn) {
+    alert("Inicia sesión para acceder a esta página.");
+    window.location.href = "/login"; // Redirigir a otra página
+  }
+  
+  const userRole = localStorage.getItem("userRole") || sessionStorage.getItem("userRole");
+  if (userRole !== "admin") {
+    alert("No tienes permiso para acceder a esta página.");
+    window.location.href = "/dashboard"; // Redirigir a otra página
+  }
+  
   // Construir la URL combinando ordering y los filtros "investigador" y "linea"
   const apiUrl = buildUrl(BASE_API_URL, {
     ordering,

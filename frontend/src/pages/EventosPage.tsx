@@ -1,5 +1,4 @@
-// src/pages/EventosPage.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -18,7 +17,6 @@ interface Evento {
   fecha: string;
   duracion: number;
   empresa_invita: string;
-  // Campos read-only devueltos por la API:
   tipo_evento_descripcion: string;
 }
 
@@ -30,7 +28,6 @@ interface TipoEvento {
 const BASE_API_URL = "http://127.0.0.1:8000/gestion/api/eventos/";
 const TIPO_EVENTO_API = "http://127.0.0.1:8000/gestion/api/tipoevento/";
 
-// Las props inyectadas por el HOC withOrderingAndMultiFilter:
 interface EventosPageProps {
   ordering: string;
   toggleOrdering: (field: string) => void;
@@ -46,13 +43,28 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
   setFilter,
   clearFilters,
 }) => {
-  // Construimos la URL combinando ordenación y el filtro de tipo_evento
+  // verifica si la sesion está iniciada, si no redirige a login
+  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  if (!isLoggedIn) {
+    alert("Inicia sesión para acceder a esta página.");
+    window.location.href = "/login"; // Redirigir a otra página
+  }
+  
+  // Estado para verificar si el usuario es admin
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Verificar el rol del usuario
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    const sesionRole = sessionStorage.getItem("userRole");
+    setIsAdmin(userRole === "admin" || sesionRole === "admin");
+  }, []);
+
   const apiUrl = buildUrl(BASE_API_URL, {
     ordering,
     tipo_evento: filters.tipo_evento,
   });
 
-  // Hook CRUD para eventos
   const {
     data: eventos,
     loading,
@@ -68,7 +80,6 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
 
   const { openModal, closeModal } = useModal();
 
-  // Estado para la lista de tipos de evento
   const [tipoEventos, setTipoEventos] = React.useState<TipoEvento[]>([]);
 
   const fetchTipoEventos = async () => {
@@ -88,6 +99,8 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
   }, [ordering, filters]);
 
   const handleNew = () => {
+    if (!isAdmin) return;
+
     setEditingItem(null);
     openModal(
       <EventoForm
@@ -104,6 +117,8 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
   };
 
   const handleEditModal = (item: Evento) => {
+    if (!isAdmin) return;
+
     setEditingItem(item);
     openModal(
       <EventoForm
@@ -173,9 +188,7 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
               value: t.id,
               label: t.descripcion,
             }))}
-            currentFilter={
-              filters.tipo_evento ? parseInt(filters.tipo_evento) : null
-            }
+            currentFilter={filters.tipo_evento ? parseInt(filters.tipo_evento) : null}
             onSelect={(value) =>
               setFilter("tipo_evento", value ? value.toString() : null)
             }
@@ -218,12 +231,14 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Listado de Eventos</h2>
-          <button
-            onClick={handleNew}
-            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
-          >
-            Nuevo Evento
-          </button>
+          {isAdmin && (
+            <button
+              onClick={handleNew}
+              className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
+            >
+              Nuevo Evento
+            </button>
+          )}
         </div>
         {loading ? (
           <p>Cargando...</p>
@@ -234,15 +249,12 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
             columns={columns}
             data={eventos}
             rowKey="id"
-            onEdit={(item) => {
-              handleEdit(item);
-              handleEditModal(item);
-            }}
-            onDelete={(item) => {
+            onEdit={isAdmin ? (item) => handleEditModal(item) : undefined}
+            onDelete={isAdmin ? (item) => {
               if (window.confirm("¿Estás seguro de eliminar este evento?")) {
                 remove(item.id);
               }
-            }}
+            } : undefined}
           />
         )}
       </div>

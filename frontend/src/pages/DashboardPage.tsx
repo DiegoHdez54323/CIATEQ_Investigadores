@@ -4,6 +4,13 @@ import { Link } from "react-router-dom";
 import ciateq from "../assets/ciateq.png";
 
 const DashboardPage: React.FC = () => {
+  // verifica si la sesion está iniciada, si no redirige a login
+  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  if (!isLoggedIn) {
+    alert("Inicia sesión para acceder a esta página.");
+    window.location.href = "/login"; // Redirigir a otra página
+  }
+  
   return (
     <Layout title="Dashboard">
       <div className="p-8">
