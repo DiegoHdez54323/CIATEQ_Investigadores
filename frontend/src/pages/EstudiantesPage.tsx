@@ -62,6 +62,23 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
   setFilter,
   clearFilters,
 }) => {
+  // verifica si la sesion está iniciada, si no redirige a login
+  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  if (!isLoggedIn) {
+    alert("Inicia sesión para acceder a esta página.");
+    window.location.href = "/login"; // Redirigir a otra página
+  }
+  
+  // Estado para controlar si el usuario es administrador
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Verificar el rol del usuario cuando el componente se monta
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    const sesionRole = sessionStorage.getItem("userRole");
+    setIsAdmin(userRole === "admin" || sesionRole === "admin");
+  }, []);
+
   // Construir la URL combinando ordenación y filtros
   const apiUrl = buildUrl(BASE_API_URL, {
     ordering,
@@ -133,6 +150,9 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
   }, [ordering, filters]);
 
   const handleNew = () => {
+    // Solo permitir si el usuario es admin
+    if (!isAdmin) return;
+
     setEditingItem(null);
     openModal(
       <EstudianteForm
@@ -151,6 +171,9 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
   };
 
   const handleEditModal = (item: Estudiante) => {
+    // Solo permitir si el usuario es admin
+    if (!isAdmin) return;
+
     setEditingItem(item);
     openModal(
       <EstudianteForm
@@ -328,12 +351,14 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Listado de Estudiantes</h2>
-          <button
-            onClick={handleNew}
-            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
-          >
-            Nuevo Estudiante
-          </button>
+          {isAdmin && (
+            <button
+              onClick={handleNew}
+              className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
+            >
+              Nuevo Estudiante
+            </button>
+          )}
         </div>
         {loading ? (
           <p>Cargando...</p>
@@ -344,17 +369,17 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
             columns={columns}
             data={estudiantes}
             rowKey="id"
-            onEdit={(item) => {
+            onEdit={isAdmin ? (item) => {
               handleEdit(item);
               handleEditModal(item);
-            }}
-            onDelete={(item) => {
+            } : undefined}
+            onDelete={isAdmin ? (item) => {
               if (
                 window.confirm("¿Estás seguro de eliminar este estudiante?")
               ) {
                 remove(item.id);
               }
-            }}
+            } : undefined}
           />
         )}
       </div>
@@ -362,4 +387,8 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(EstudiantesPageComponent);
+export default withOrderingAndFilter(EstudiantesPageComponent, "id", {
+  investigador: null,
+  carrera: null,
+  tipo_estudiante: null,
+});

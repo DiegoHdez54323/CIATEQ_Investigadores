@@ -13,6 +13,19 @@ interface Herramienta {
 const API_URL = "http://127.0.0.1:8000/gestion/api/herramientas/";
 
 const HerramientasPage: React.FC = () => {
+  // verifica si la sesion está iniciada, si no redirige a login
+  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  if (!isLoggedIn) {
+    alert("Inicia sesión para acceder a esta página.");
+    window.location.href = "/login"; // Redirigir a otra página
+  }
+  
+  const userRole = localStorage.getItem("userRole") || sessionStorage.getItem("userRole");
+  if (userRole !== "admin") {
+    alert("No tienes permiso para acceder a esta página.");
+    window.location.href = "/dashboard"; // Redirigir a otra página
+  }
+  
   const {
     data: herramientas,
     loading,

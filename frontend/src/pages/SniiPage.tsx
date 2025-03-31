@@ -50,6 +50,23 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   setFilter,
   clearFilters,
 }) => {
+  // verifica si la sesion está iniciada, si no redirige a login
+  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  if (!isLoggedIn) {
+    alert("Inicia sesión para acceder a esta página.");
+    window.location.href = "/login"; // Redirigir a otra página
+  }
+  
+  // Estado para controlar si el usuario es administrador
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Verificar el rol del usuario cuando el componente se monta
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    const sesionRole = sessionStorage.getItem("userRole");
+    setIsAdmin(userRole === "admin" || sesionRole == "admin");
+  }, []);
+
   // Construir la URL combinando ordenación y el filtro "nivel"
   const apiUrl = buildUrl(BASE_API_URL, { ordering, nivel: filters.nivel });
 
@@ -102,6 +119,9 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   }, [ordering, filters]);
 
   const handleNew = () => {
+    // Solo permitir si el usuario es admin
+    if (!isAdmin) return;
+    
     setEditingItem(null);
     openModal(
       <SniiForm
@@ -119,6 +139,9 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   };
 
   const handleEditModal = (item: Snii) => {
+    // Solo permitir si el usuario es admin
+    if (!isAdmin) return;
+    
     setEditingItem(item);
     openModal(
       <SniiForm
@@ -181,12 +204,14 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Listado de registros SNII</h2>
-          <button
-            onClick={handleNew}
-            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
-          >
-            Nuevo SNII
-          </button>
+          {isAdmin && (
+            <button
+              onClick={handleNew}
+              className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
+            >
+              Nuevo SNII
+            </button>
+          )}
         </div>
         {loading ? (
           <p>Cargando...</p>
@@ -197,15 +222,15 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
             columns={columns}
             data={sniiList}
             rowKey="id"
-            onEdit={(item) => {
+            onEdit={isAdmin ? (item) => {
               handleEdit(item);
               handleEditModal(item);
-            }}
-            onDelete={(item) => {
+            } : undefined}
+            onDelete={isAdmin ? (item) => {
               if (window.confirm("¿Estás seguro de eliminar este SNII?")) {
                 remove(item.id);
               }
-            }}
+            } : undefined}
           />
         )}
       </div>
@@ -213,4 +238,6 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(SniiPageComponent);
+export default withOrderingAndFilter(SniiPageComponent, "id", {
+  nivel: null,
+});

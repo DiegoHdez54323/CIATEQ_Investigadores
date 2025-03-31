@@ -24,11 +24,13 @@ import DetEventosPage from "./pages/DetEventosPage";
 import DetLineasPage from "./pages/DetLineasPage";
 import DetProyPage from "./pages/DetProyPage";
 import DetHerrPage from "./pages/DetHerrPage";
+import Login from "./pages/Login";
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/articulos" element={<ArticulosPage />} />
         <Route path="/proyectos" element={<ProyectosPage />} />
