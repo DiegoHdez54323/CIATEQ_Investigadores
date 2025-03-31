@@ -1,10 +1,10 @@
 // src/pages/SniiPage.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
 import { useModal } from "../context/ModalContext";
-import SniiForm from "../components/forms/SNIIForm";
+import SniiForm from "../components/forms/SniiForm";
 import SortButton from "../components/SortButton";
 import FilterButton from "../components/FilterButton";
 import { buildUrl } from "../utils/buildUrl";
@@ -70,8 +70,8 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   const { openModal, closeModal } = useModal();
 
   // Estados para las listas de opciones (se mantienen locales, ya que estos datos se usan para dropdowns)
-  const [investigators, setInvestigators] = React.useState<Investigator[]>([]);
-  const [niveles, setNiveles] = React.useState<Nivel[]>([]);
+  const [investigators, setInvestigators] = useState<Investigator[]>([]);
+  const [niveles, setNiveles] = useState<Nivel[]>([]);
 
   const fetchInvestigators = async () => {
     try {
@@ -213,6 +213,4 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(SniiPageComponent, "id", {
-  nivel: null,
-});
+export default withOrderingAndFilter(SniiPageComponent);

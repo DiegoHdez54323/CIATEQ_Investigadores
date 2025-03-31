@@ -1,5 +1,5 @@
 // src/pages/EventosPage.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -69,7 +69,7 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
   const { openModal, closeModal } = useModal();
 
   // Estado para la lista de tipos de evento
-  const [tipoEventos, setTipoEventos] = React.useState<TipoEvento[]>([]);
+  const [tipoEventos, setTipoEventos] = useState<TipoEvento[]>([]);
 
   const fetchTipoEventos = async () => {
     try {
@@ -250,6 +250,4 @@ const EventosPageComponent: React.FC<EventosPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(EventosPageComponent, "id", {
-  tipo_evento: null,
-});
+export default withOrderingAndFilter(EventosPageComponent);

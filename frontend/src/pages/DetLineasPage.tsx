@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -72,10 +72,8 @@ const DetLineasPageComponent: React.FC<DetLineasPageProps> = ({
   const { openModal, closeModal } = useModal();
 
   // Estados locales para obtener las listas de opciones para filtros y formulario
-  const [investigadores, setInvestigadores] = React.useState<Investigador[]>(
-    []
-  );
-  const [lineas, setLineas] = React.useState<Linea[]>([]);
+  const [investigadores, setInvestigadores] = useState<Investigador[]>([]);
+  const [lineas, setLineas] = useState<Linea[]>([]);
 
   const fetchInvestigadores = async () => {
     try {
@@ -242,7 +240,4 @@ const DetLineasPageComponent: React.FC<DetLineasPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(DetLineasPageComponent, "id", {
-  investigador: null,
-  linea: null,
-});
+export default withOrderingAndFilter(DetLineasPageComponent);

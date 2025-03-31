@@ -19,7 +19,9 @@ from gestion.views import (
     TipoEstudianteViewSet,
     EstudiantesViewSet,
     UsuariosViewSet,
+    dashboard_data,
 )
+
 
 router = DefaultRouter()
 router.register(r"investigadores", InvestigadorViewSet)
@@ -44,4 +46,5 @@ router.register(r"usuarios", UsuariosViewSet)
 
 urlpatterns = [
     path("api/", include(router.urls)),
+    path("api/dashboard/", dashboard_data, name="dashboard-data"),
 ]

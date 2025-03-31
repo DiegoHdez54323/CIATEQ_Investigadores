@@ -16,7 +16,7 @@ import CarrerasPage from "./pages/CarrerasPage";
 import NivelSniiPage from "./pages/NivelSniiPage";
 import TipoEstudiantePage from "./pages/TipoEstudiantesPage";
 import InvestigadoresPage from "./pages/InvestigadoresPage";
-import SniiPage from "./pages/SNIIPage";
+import SniiPage from "./pages/SniiPage";
 import EventosPage from "./pages/EventosPage";
 import EstudiantesPage from "./pages/EstudiantesPage";
 import DetArtPage from "./pages/DetArtPage";
@@ -47,7 +47,7 @@ function App() {
         <Route path="/detlineas" element={<DetLineasPage />} />
         <Route path="/detproy" element={<DetProyPage />} />
         <Route path="/detherr" element={<DetHerrPage />} />
-        <Route path="*" element={<Navigate to="/investigadores" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Router>
   );

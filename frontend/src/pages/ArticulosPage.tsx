@@ -193,4 +193,4 @@ const ArticulosPageComponent: React.FC<ArticulosPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(ArticulosPageComponent, "id", {});
+export default withOrderingAndFilter(ArticulosPageComponent);

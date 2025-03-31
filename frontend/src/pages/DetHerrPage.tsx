@@ -1,5 +1,5 @@
 // src/pages/DetHerrPage.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -72,8 +72,8 @@ const DetHerrPageComponent: React.FC<DetHerrPageProps> = ({
   const { openModal, closeModal } = useModal();
 
   // Estados para obtener las listas de opciones para el formulario y filtros
-  const [proyectos, setProyectos] = React.useState<Proyecto[]>([]);
-  const [herramientas, setHerramientas] = React.useState<Herramienta[]>([]);
+  const [proyectos, setProyectos] = useState<Proyecto[]>([]);
+  const [herramientas, setHerramientas] = useState<Herramienta[]>([]);
 
   const fetchProyectos = async () => {
     try {
@@ -237,7 +237,4 @@ const DetHerrPageComponent: React.FC<DetHerrPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(DetHerrPageComponent, "id", {
-  proyecto: null,
-  herramienta: null,
-});
+export default withOrderingAndFilter(DetHerrPageComponent);

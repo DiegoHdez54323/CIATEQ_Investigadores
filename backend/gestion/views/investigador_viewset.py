@@ -8,5 +8,6 @@ class InvestigadorViewSet(viewsets.ModelViewSet):
     queryset = Investigador.objects.all()
     serializer_class = InvestigadorSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ["sueldo", "id"]
+
+    ordering_fields = ["id", "sueldo"]
     ordering = ["id"]

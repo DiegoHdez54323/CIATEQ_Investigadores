@@ -8,5 +8,6 @@ class ProyectosViewSet(viewsets.ModelViewSet):
     queryset = Proyectos.objects.all()
     serializer_class = ProyectosSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ["fecha_inicio", "fecha_termino", "ingresos", "id"]
+
+    ordering_fields = ["id", "fecha_inicio", "fecha_termino", "ingresos"]
     ordering = ["id"]

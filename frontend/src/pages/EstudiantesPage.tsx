@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -88,13 +88,9 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
 
   // Estados para obtener las listas de opciones para filtros y para el formulario
   // (Se mantienen locales, pues estos arrays se usan para poblar dropdowns)
-  const [investigadores, setInvestigadores] = React.useState<Investigador[]>(
-    []
-  );
-  const [carreras, setCarreras] = React.useState<Carrera[]>([]);
-  const [tiposEstudiante, setTiposEstudiante] = React.useState<
-    TipoEstudiante[]
-  >([]);
+  const [investigadores, setInvestigadores] = useState<Investigador[]>([]);
+  const [carreras, setCarreras] = useState<Carrera[]>([]);
+  const [tiposEstudiante, setTiposEstudiante] = useState<TipoEstudiante[]>([]);
 
   const fetchInvestigadores = async () => {
     try {
@@ -366,8 +362,4 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(EstudiantesPageComponent, "id", {
-  investigador: null,
-  carrera: null,
-  tipo_estudiante: null,
-});
+export default withOrderingAndFilter(EstudiantesPageComponent);

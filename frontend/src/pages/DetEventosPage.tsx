@@ -1,5 +1,5 @@
 // src/pages/DetEventosPage.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -73,10 +73,8 @@ const DetEventosPageComponent: React.FC<DetEventosPageProps> = ({
   const { openModal, closeModal } = useModal();
 
   // Estados para las listas de opciones (usados para el formulario y filtros)
-  const [investigadores, setInvestigadores] = React.useState<Investigador[]>(
-    []
-  );
-  const [eventos, setEventos] = React.useState<Evento[]>([]);
+  const [investigadores, setInvestigadores] = useState<Investigador[]>([]);
+  const [eventos, setEventos] = useState<Evento[]>([]);
 
   const fetchInvestigadores = async () => {
     try {
@@ -245,7 +243,4 @@ const DetEventosPageComponent: React.FC<DetEventosPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(DetEventosPageComponent, "id", {
-  investigador: null,
-  evento: null,
-});
+export default withOrderingAndFilter(DetEventosPageComponent);
