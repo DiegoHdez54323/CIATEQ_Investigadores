@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -32,12 +32,13 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
   toggleOrdering,
 }) => {
   // verifica si la sesion está iniciada, si no redirige a login
-  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  const isLoggedIn =
+    localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
   if (!isLoggedIn) {
     alert("Inicia sesión para acceder a esta página.");
     window.location.href = "/login"; // Redirigir a otra página
   }
-  
+
   // Estado para controlar si el usuario es administrador
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -75,7 +76,7 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
   const handleNew = () => {
     // Solo permitir si el usuario es admin
     if (!isAdmin) return;
-    
+
     setEditingItem(null);
     openModal(
       <InvestigadorForm
@@ -93,7 +94,7 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
   const handleEditModal = (item: Investigador) => {
     // Solo permitir si el usuario es admin
     if (!isAdmin) return;
-    
+
     setEditingItem(item);
     openModal(
       <InvestigadorForm
@@ -165,17 +166,27 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
             columns={columns}
             data={investigadores}
             rowKey="id"
-            onEdit={isAdmin ? (item) => {
-              handleEdit(item);
-              handleEditModal(item);
-            } : undefined}
-            onDelete={isAdmin ? (item) => {
-              if (
-                window.confirm("¿Estás seguro de eliminar este investigador?")
-              ) {
-                remove(item.id);
-              }
-            } : undefined}
+            onEdit={
+              isAdmin
+                ? (item) => {
+                    handleEdit(item);
+                    handleEditModal(item);
+                  }
+                : undefined
+            }
+            onDelete={
+              isAdmin
+                ? (item) => {
+                    if (
+                      window.confirm(
+                        "¿Estás seguro de eliminar este investigador?"
+                      )
+                    ) {
+                      remove(item.id);
+                    }
+                  }
+                : undefined
+            }
           />
         )}
       </div>

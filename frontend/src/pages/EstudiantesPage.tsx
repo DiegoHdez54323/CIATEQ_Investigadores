@@ -63,12 +63,13 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
   clearFilters,
 }) => {
   // verifica si la sesion está iniciada, si no redirige a login
-  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  const isLoggedIn =
+    localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
   if (!isLoggedIn) {
     alert("Inicia sesión para acceder a esta página.");
     window.location.href = "/login"; // Redirigir a otra página
   }
-  
+
   // Estado para controlar si el usuario es administrador
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -369,17 +370,27 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
             columns={columns}
             data={estudiantes}
             rowKey="id"
-            onEdit={isAdmin ? (item) => {
-              handleEdit(item);
-              handleEditModal(item);
-            } : undefined}
-            onDelete={isAdmin ? (item) => {
-              if (
-                window.confirm("¿Estás seguro de eliminar este estudiante?")
-              ) {
-                remove(item.id);
-              }
-            } : undefined}
+            onEdit={
+              isAdmin
+                ? (item) => {
+                    handleEdit(item);
+                    handleEditModal(item);
+                  }
+                : undefined
+            }
+            onDelete={
+              isAdmin
+                ? (item) => {
+                    if (
+                      window.confirm(
+                        "¿Estás seguro de eliminar este estudiante?"
+                      )
+                    ) {
+                      remove(item.id);
+                    }
+                  }
+                : undefined
+            }
           />
         )}
       </div>
@@ -387,8 +398,4 @@ const EstudiantesPageComponent: React.FC<EstudiantesPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(EstudiantesPageComponent, "id", {
-  investigador: null,
-  carrera: null,
-  tipo_estudiante: null,
-});
+export default withOrderingAndFilter(EstudiantesPageComponent);

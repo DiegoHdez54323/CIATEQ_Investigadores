@@ -51,12 +51,13 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   clearFilters,
 }) => {
   // verifica si la sesion está iniciada, si no redirige a login
-  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  const isLoggedIn =
+    localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
   if (!isLoggedIn) {
     alert("Inicia sesión para acceder a esta página.");
     window.location.href = "/login"; // Redirigir a otra página
   }
-  
+
   // Estado para controlar si el usuario es administrador
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -121,7 +122,7 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   const handleNew = () => {
     // Solo permitir si el usuario es admin
     if (!isAdmin) return;
-    
+
     setEditingItem(null);
     openModal(
       <SniiForm
@@ -141,7 +142,7 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   const handleEditModal = (item: Snii) => {
     // Solo permitir si el usuario es admin
     if (!isAdmin) return;
-    
+
     setEditingItem(item);
     openModal(
       <SniiForm
@@ -222,15 +223,25 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
             columns={columns}
             data={sniiList}
             rowKey="id"
-            onEdit={isAdmin ? (item) => {
-              handleEdit(item);
-              handleEditModal(item);
-            } : undefined}
-            onDelete={isAdmin ? (item) => {
-              if (window.confirm("¿Estás seguro de eliminar este SNII?")) {
-                remove(item.id);
-              }
-            } : undefined}
+            onEdit={
+              isAdmin
+                ? (item) => {
+                    handleEdit(item);
+                    handleEditModal(item);
+                  }
+                : undefined
+            }
+            onDelete={
+              isAdmin
+                ? (item) => {
+                    if (
+                      window.confirm("¿Estás seguro de eliminar este SNII?")
+                    ) {
+                      remove(item.id);
+                    }
+                  }
+                : undefined
+            }
           />
         )}
       </div>
@@ -238,6 +249,4 @@ const SniiPageComponent: React.FC<SniiPageProps> = ({
   );
 };
 
-export default withOrderingAndFilter(SniiPageComponent, "id", {
-  nivel: null,
-});
+export default withOrderingAndFilter(SniiPageComponent);
