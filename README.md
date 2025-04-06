@@ -125,4 +125,6 @@ http://localhost:5173/
 - Usuario: prueba
 - Contraseña: 123
 
+![login image](./resources/ciateq_login.png)
+
 ---
