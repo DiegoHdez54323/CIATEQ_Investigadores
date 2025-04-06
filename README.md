@@ -27,11 +27,14 @@ Este proyecto consiste en una plataforma web para la **gestión de investigadore
 
 ---
 
-## 🗄️ Estructura de la base de datos
+## 🗄️ Base de datos
+
+### Estructura de la base de datos
 
 Para entender la estructura de la base de datos, aqui está el diagrama Entidad Relacion del mismo.
 
 ![database image](./resources/ciateq_investigadores_django%20-%20public.png)
+
 ---
 
 ## ⚙️ Instrucciones para desarrollo
@@ -72,14 +75,34 @@ DATABASES = {
 python manage.py migrate
 ```
 
-5. Iniciar el servidor backend:
+5. Crear los archivos para comandos personalizados:
+En la carpeta de tu aplicación Django, crea las siguientes carpetas y archivos:
+
+```bash
+app/
+└── management/
+    └── commands/
+        └── seed_data.py
+    └── __init__.py
+└── __init__.py
+```
+
+El script del seeder se encuentra en la ruta raiz del projecto, y lleva el nombre de `seed_data.py`
+
+6. Ejecutar el comando para sembrar los datos iniciales:
+
+```bash
+python manage.py seed_data
+```
+
+7. Iniciar el servidor backend:
 
 ```bash
 cd backend
 python manage.py runserver
 ```
 
-6. La API estará disponible en:
+8. La API estará disponible en:
 
 ```
 http://127.0.0.1:8000/
