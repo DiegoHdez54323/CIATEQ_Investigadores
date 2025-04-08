@@ -1,3 +1,13 @@
+Comentarios del profesor 07/abr/2025
+Marca error el archivo App.tsx  en la linea  *** import Login from "./pages/Login";   debido a que el archivo login es con extension jsx
+Los datos no estan en la BD ni tengo manera de cargarlos, si estan en el repositorio describe paso a paso como cargarlo a la BD que yo de de alta
+No me indicas que debo instalar las liberrias cors-headers, djanfo-filter
+No indicas los tipos de roles que descripcion deben tener (puse "Administrador" y no me dejo capturar nada). tuve que buscar por codigo que el rol debia ser "admin"
+No esta el modulo para dar de alta los usuarios
+No defines estatus del investigador, hace falta este campo en casi todas las tablas para que deinan si esta activo, inactivo o en eventos cancelado, en proces, realizado, etc
+Revisar los campos de las tablas pues les hace falta mucho campo importantes
+
+
 # Proyecto CIATEQ Investigadores
 
 Este proyecto consiste en una plataforma web para la **gestión de investigadores, proyectos, estudiantes, publicaciones y eventos** dentro de un centro de investigación.
