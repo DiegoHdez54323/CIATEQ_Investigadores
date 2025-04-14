@@ -229,3 +229,9 @@ Python 3.13, PostgreSQL, Gunicorn, Nginx
 
   ## Resultado final:
   La pagina podrá ser visualizada desde la ruta `http://localhost`
+
+  ---
+
+## 📍 Endpoints disponibles de la aplicacion:
+A continuación, se mostrarán todos los endpoints que se tienen para la aplicación:
+![API de Django](./resources/swagger_full.png)
