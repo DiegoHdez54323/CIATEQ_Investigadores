@@ -151,3 +151,81 @@ http://localhost:5173/
 ![login image](./resources/ciateq_login.png)
 
 ---
+
+## 📦 Despliegue en producción con Gunicorn + Nginx
+🔧 Requisitos
+
+Ubuntu Server 24.04.2 <br> 
+Python 3.13, PostgreSQL, Gunicorn, Nginx
+
+### Backend con Gunicorn:
+  1. Instalar Ubuntu (recomendadamente server edition) en maquina de despliegue o en maquina virutal (se recomienda usar VirtualBox de Oracle).
+  2. Clonar el repositorio por medio de un `git clone`
+  3. Una vez instalado el sistema operativo, instalar python 3.13 junto con pip y venv de sus respectivas versiones.
+  ```bash
+  sudo apt install python3.13 python3.13-pip python3.13-venv
+  ```
+  Después, se recomienda hacer los passos anteriormente mencionados para crear el virutal enviroment desde la carpeta raiz del proyecto. <br><br>
+  4. Instalar postgresql.
+  ```bash
+  sudo apt install postgres
+  ```
+  5. Cambiar de usuario, y hacer un cambio de contraseña del usuario
+  ```bash
+  sudo su postgres
+  passwd # Este comando cambiará la contraseña del usuario
+  ```
+  Tambien se recomienda iniciar `psql` y cambiar la contraseña del usuario por medio de una query.
+  ```sql
+  ALTER USER postgres WITH PASSWORD 'tuContraseña';
+  ```
+  Una vez cambiada la contraseña, nos salimos de la sesión del usuario de postgres con el siguiente comando:
+  ```bash
+  exit
+  ```
+  Asegurate de que las credenciales de la base de datos coincidan con las establecidas en el settings.py de django.
+
+  6. Dentro del venv, instala las librerias especificadas en el archivo `requirements.txt` como se especifica en la parte superior del documento.
+
+  7. Hacer migraciones de django a postgresql:
+  ```bash
+  python manage.py migrate
+  python manage.py seed_data
+  ```
+  8. Una vez el proyecto funciona, se puede comenzar a inicializar **Gunicorn**.<br><br>
+  Lo primero que se tiene que hacer, es abrir el archivo gunicorn-example.service y establecer las variables del servicio para que correspondan a tu proyecto.
+  algunas variables que podrías cambiar, son las de **User**, **WorkingDirectory**, **ExecStart** (para establecer la cantidad de workers que usarás), entre otros
+  Un archivo de prueba, se encuentra en la raiz del proyecto.
+  9. Una vez el archivo está correctamente definido, moverlo a `/etc/systemd/system`, e iniciar el servicio con systemctl:
+  ```bash
+  sudo systemctl daemon-reexec
+  sudo systemctl start gunicorn-example
+  sudo systemctl enable gunicorn-example
+  ```
+
+## Frontend con NginX:
+  1. Realizar la build del frontend:
+  ```bash
+  npm run build
+  ```
+  El comando dará como resultado una carpeta con los archivos estaticos previamente compilados para poder usar en la pagina web.
+
+  2. Se tendrá que crear la carpeta `frontend` en la ruta `/var/www` con el siguiente comando:
+  ```bash
+  sudo mkdir /var/www/miapp-frontend
+  ```
+  Después de terminar esto, se tendrá que copiar los archivos generados por ```npm run build``` a la carpeta previamente especificada
+
+  3. Se tiene un archivo llamado miapp en la capeta raiz del proyecto, ese archivo lo vamos a mover a la carpeta de `/etc/nginx/sites-available/miapp`, y enlazar las dos carpetas con el siguiente comando: 
+  ```bash
+  sudo ln -s /etc/nginx/sites-available/miapp /etc/nginx/sites-enabled/
+  ```
+  4. Finalmente, ejecuta los siguientes comandos:
+  ```bash
+  sudo nginx -t
+  sudo systemctl restart nginx
+  python manage.py collectstatics #Esto se hace desde el backend del proyecto.
+  ```
+
+  ## Resultado final:
+  La pagina podrá ser visualizada desde la ruta `http://localhost`
