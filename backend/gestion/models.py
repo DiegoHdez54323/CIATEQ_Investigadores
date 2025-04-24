@@ -75,6 +75,14 @@ class Proyectos(models.Model):
     fecha_termino = models.DateField()
     ingresos = models.DecimalField(max_digits=10, decimal_places=2)
 
+    duracion_real = models.IntegerField(blank=True, null=True)
+    duracion_estimada = models.IntegerField(blank=True, null=True)
+    estado_modelo = models.CharField(
+        max_length=20,
+        choices=[('pendiente', 'pendiente'), ('calculado', 'calculado')],
+        default='pendiente'
+    )
+
     class Meta:
         db_table = "proyectos"
 

@@ -28,12 +28,13 @@ interface DashboardData {
 
 const DashboardPage: React.FC = () => {
   // verifica si la sesion está iniciada, si no redirige a login
-  const isLoggedIn = localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
+  const isLoggedIn =
+    localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
   if (!isLoggedIn) {
     alert("Inicia sesión para acceder a esta página.");
     window.location.href = "/login"; // Redirigir a otra página
   }
-  
+
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 

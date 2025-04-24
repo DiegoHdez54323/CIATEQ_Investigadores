@@ -1,0 +1,16 @@
+id,nombre,ingresos,num_investigadores,num_herramientas,es_principal_promedio,duracion_real
+1,Sistema de Autenticación Biométrica con Reconocimiento Facial,1800000.00,1,2,1.0,180
+2,Plataforma de Gestión Escolar en la Nube,2200000.00,1,3,1.0,365
+3,Sistema de Monitoreo de Temperatura y Humedad con IoT,1000000.00,3,3,0.3333333333333333,180
+4,Brazo Robótico Controlado por Señales Microeléctricas,7200000.00,1,2,1.0,183
+5,Aplicación Móvil para el Aprendizaje de Matemáticas con Gamificación,150000.00,3,1,0.3333333333333333,136
+6,Uso de Realidad Aumentada en la Enseñanza de HistoriaMóviles,100000.00,2,3,0.5,304
+7,Producción de Bioplásticos a partir de Almidón de Papa,400000.00,2,1,0.5,153
+8,Filtro de Agua Basado en NanotecnologíaMóviles,250000.00,2,2,0.5,366
+9,Vehículo Autónomo para Entrega de Paquetes en Ambientes Controlados,5200000.00,1,1,1.0,183
+10,Exoesqueleto Robótico para Asistencia en Rehabilitación FísicaMóviles,800000.00,3,3,0.3333333333333333,184
+11,Sistema de Captación y Filtrado de Agua de Lluvia,100000.00,2,3,0.5,61
+12,Biogás a partir de Residuos OrgánicosMóviles,120000.00,3,1,0.3333333333333333,213
+13,Automatización del Alumbrado Público con Sensores de Luz,200000.00,2,3,0.5,92
+14,Cargador Solar para Dispositivos Móviles,700000.00,3,1,0.3333333333333333,244
+15,Generador de Energía a partir de Vibraciones Mecánicas,3200000.00,3,2,0.3333333333333333,184
