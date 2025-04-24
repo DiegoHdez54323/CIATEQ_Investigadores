@@ -64,6 +64,9 @@ class Articulos(models.Model):
     pais_publicacion = models.CharField(max_length=100, blank=True, null=True)
     anio_publicacion = models.IntegerField(blank=True, null=True)
 
+    resumen = models.TextField(blank=True, null=True)
+    citados = models.IntegerField(default=0)
+
     class Meta:
         db_table = "articulos"
 
@@ -74,6 +77,21 @@ class Proyectos(models.Model):
     fecha_inicio = models.DateField()
     fecha_termino = models.DateField()
     ingresos = models.DecimalField(max_digits=10, decimal_places=2)
+
+    descripcion = models.TextField(blank=True, null=True)
+
+    STATUS_CHOICES = [
+        ("Pendiente", "Pendiente"),
+        ("Activo", "Activo"),
+        ("Pausado", "Pausado"),
+        ("Completado", "Completado"),
+        ("Cancelado", "Cancelado"),
+    ]
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default="Pending",
+    )
 
     class Meta:
         db_table = "proyectos"
@@ -99,6 +117,11 @@ class Investigador(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     correo = models.CharField(unique=True, max_length=100)
     sueldo = models.DecimalField(max_digits=10, decimal_places=2)
+
+    titulo = models.CharField(max_length=100, blank=True, null=True)
+    ubicacion = models.CharField(max_length=200, blank=True, null=True)
+    avatar_url = models.URLField(blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = "investigador"
@@ -138,8 +161,32 @@ class Estudiante(models.Model):
     sueldo = models.DecimalField(max_digits=10, decimal_places=2, default=3200.00)
     nombre = models.CharField(max_length=100, blank=True, null=True)
 
+    STATUS_CHOICES = [
+        ("Activo", "Activo"),
+        ("Abandonó", "Abandonó"),
+        ("Graduado", "Graduado"),
+    ]
+    status = models.CharField(
+        max_length=50,
+        choices=STATUS_CHOICES,
+        default="Active",
+    )
+
     class Meta:
         db_table = "estudiante"
+
+
+class Educacion(models.Model):
+    id = models.AutoField(primary_key=True)
+    investigador = models.ForeignKey(
+        Investigador, on_delete=models.CASCADE, related_name="educacion"
+    )
+    grado = models.CharField(max_length=200)
+    institucion = models.CharField(max_length=200)
+    anio = models.IntegerField()
+
+    class Meta:
+        db_table = "educacion"
 
 
 # ============ 3. Modelos que originalmente tenían claves compuestas ============
@@ -160,6 +207,9 @@ class DetEventos(models.Model):
     id = models.AutoField(primary_key=True)
     investigador = models.ForeignKey(Investigador, on_delete=models.CASCADE)
     evento = models.ForeignKey(Eventos, on_delete=models.CASCADE)
+
+    rol = models.CharField(max_length=100, blank=True, null=True)
+    asunto = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         db_table = "det_eventos"

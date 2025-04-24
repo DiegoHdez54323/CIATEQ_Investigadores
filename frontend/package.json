@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-progress": "^1.1.4",
+    "@radix-ui/react-tabs": "^1.1.9",
     "@tailwindcss/vite": "^4.0.15",
     "classnames": "^2.5.1",
     "flowbite": "^3.1.2",

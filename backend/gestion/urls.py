@@ -20,6 +20,7 @@ from gestion.views import (
     EstudiantesViewSet,
     UsuariosViewSet,
     dashboard_data,
+    EducacionViewSet,
 )
 
 
@@ -42,6 +43,7 @@ router.register(r"carreras", CarrerasViewSet)
 router.register(r"tipoestudiante", TipoEstudianteViewSet)
 router.register(r"estudiantes", EstudiantesViewSet)
 router.register(r"usuarios", UsuariosViewSet)
+router.register(r"educacion", EducacionViewSet)
 
 
 urlpatterns = [
