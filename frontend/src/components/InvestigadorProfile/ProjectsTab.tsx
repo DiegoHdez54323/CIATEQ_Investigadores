@@ -1,4 +1,3 @@
-// components/ProjectsTab.tsx
 import React from "react";
 import {
   Card,
@@ -25,9 +24,11 @@ interface ProjectsTabProps {
 
 export const ProjectsTab: React.FC<ProjectsTabProps> = ({ projects }) => (
   <Card>
-    <CardHeader>
-      <CardTitle>Research Projects</CardTitle>
-      <CardDescription>Current and past research initiatives</CardDescription>
+    <CardHeader className="flex items-center justify-between">
+      <CardTitle>Proyectos de Investigacion</CardTitle>
+      <CardDescription>
+        Iniciativas de investigación actuales y pasadas
+      </CardDescription>
     </CardHeader>
     <CardContent>
       <div className="space-y-6">

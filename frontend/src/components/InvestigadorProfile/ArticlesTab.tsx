@@ -1,4 +1,3 @@
-// components/ArticlesTab.tsx
 import React from "react";
 import {
   Card,
@@ -33,14 +32,10 @@ interface ArticlesTabProps {
 export const ArticlesTab: React.FC<ArticlesTabProps> = ({ articles }) => (
   <Card>
     <CardHeader className="flex items-center justify-between">
-      <div>
-        <CardTitle>Published Articles</CardTitle>
-        <CardDescription>Research publications and papers</CardDescription>
-      </div>
-      <Button variant="outline" size="sm">
-        <Download className="h-4 w-4" />
-        Export
-      </Button>
+      <CardTitle>Articulos Publicados</CardTitle>
+      <CardDescription>
+        Publicaciones y artículos de investigación
+      </CardDescription>
     </CardHeader>
     <CardContent>
       <div className="space-y-6">

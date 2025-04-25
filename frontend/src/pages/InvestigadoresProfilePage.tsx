@@ -10,18 +10,28 @@ import {
 } from "../components/ui/Tabs";
 
 import { ProfileGeneralCard } from "../components/InvestigadorProfile/ProfileGeneralCard";
-import { ProfileDetailsCard } from "../components/InvestigadorProfile/ProfileDetailsCard";
+import {
+  ProfileDetailsCard,
+  Educacion,
+} from "../components/InvestigadorProfile/ProfileDetailsCard";
 import { OverviewTab } from "../components/InvestigadorProfile/OverviewTab";
-import { ArticlesTab } from "../components/InvestigadorProfile/ArticlesTab";
-import { ProjectsTab } from "../components/InvestigadorProfile/ProjectsTab";
-import { StudentsTab } from "../components/InvestigadorProfile/StudentsTab";
-import { EventsTab } from "../components/InvestigadorProfile/EventsTab";
+import {
+  ArticlesTab,
+  Article,
+} from "../components/InvestigadorProfile/ArticlesTab";
+import {
+  ProjectsTab,
+  Project,
+} from "../components/InvestigadorProfile/ProjectsTab";
+import {
+  StudentsTab,
+  Student,
+} from "../components/InvestigadorProfile/StudentsTab";
+import { EventsTab, Event } from "../components/InvestigadorProfile/EventsTab";
 
-// sampleData para las pestañas mientras se implementan
+type Tab = "overview" | "articulos" | "proyectos" | "estudiantes" | "eventos";
 
-type Tab = "overview" | "articles" | "projects" | "students" | "events";
-
-interface InvestigatorData {
+interface InvestigadorData {
   id: number;
   nombre: string;
   apellido: string;
@@ -29,7 +39,7 @@ interface InvestigatorData {
   correo: string;
   titulo: string | null;
   ubicacion: string | null;
-  avatar_url: string | null;
+  avatar: string;
   bio: string | null;
   articles_count: number;
   projects_count: number;
@@ -37,43 +47,19 @@ interface InvestigatorData {
   events_count: number;
 }
 
-interface Education {
-  degree: string;
-  institution: string;
-  year: string;
-}
-
-// Este Article coincide con lo que espera ArticlesTab
-interface Article {
-  id: string;
-  title: string;
-  journal: string;
-  year: string;
-  citations: number;
-  abstract: string;
-  doi: string;
-}
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  funding: string; // coincide con p.funding
-  period: string;
-  status: string;
-}
-
 export const InvestigadoresProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>("overview");
 
-  const [investData, setInvestData] = useState<InvestigatorData | null>(null);
+  const [investData, setInvestData] = useState<InvestigadorData | null>(null);
   const [sniiDesc, setSniiDesc] = useState("");
   const [areas, setAreas] = useState<string[]>([]);
-  const [education, setEducation] = useState<Education[]>([]);
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [educacion, setEducacion] = useState<Educacion[]>([]);
+  const [articulos, setArticulos] = useState<Article[]>([]);
+  const [proyectos, setProyectos] = useState<Project[]>([]);
+  const [estudiantes, setEstudiantes] = useState<Student[]>([]);
+  const [eventos, setEventos] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -105,12 +91,12 @@ export const InvestigadoresProfilePage: React.FC = () => {
           ? lineasArr.map((l: any) => l.descripcion_linea)
           : []
       );
-      setEducation(
+      setEducacion(
         Array.isArray(eduArr)
           ? eduArr.map((e: any) => ({
-              degree: e.grado,
-              institution: e.institucion,
-              year: String(e.anio), // ahora string
+              grado: e.grado,
+              institucion: e.institucion,
+              anio: String(e.anio),
             }))
           : []
       );
@@ -129,18 +115,18 @@ export const InvestigadoresProfilePage: React.FC = () => {
             )
               .then((r) => r.json())
               .then((art) => ({
-                id: String(art.id), // string aquí
+                id: String(art.id),
                 title: art.nombre,
                 journal: art.nombre_revista,
-                year: String(art.anio_publicacion), // string aquí
+                year: String(art.anio_publicacion),
                 citations: art.citados,
                 abstract: art.resumen ?? "",
-                doi: art.doi ?? "", // siempre string
+                doi: art.doi ?? "",
               }))
           )
         )
       )
-      .then(setArticles);
+      .then(setArticulos);
 
     // Proyectos: detproy + fetch de cada proyecto
     const projFetch = fetch(
@@ -158,16 +144,61 @@ export const InvestigadoresProfilePage: React.FC = () => {
                 id: String(proj.id),
                 title: proj.nombre,
                 description: proj.descripcion ?? "",
-                funding: proj.ingresos, // usamos el campo ingresos
+                funding: proj.ingresos,
                 period: `${proj.fecha_inicio} – ${proj.fecha_termino}`,
                 status: proj.status,
               }))
           )
         )
       )
-      .then(setProjects);
+      .then(setProyectos);
 
-    Promise.all([general, artFetch, projFetch])
+    // 4) estudiantes
+    const studentsFetch = fetch(
+      `http://127.0.0.1:8000/gestion/api/estudiantes/?investigador=${id}`
+    )
+      .then((r) => r.json())
+      .then((arr: any[]) =>
+        arr.map((e) => ({
+          id: String(e.id),
+          nombre: e.nombre,
+          escuela: e.escuela,
+          fecha_inicio: e.fecha_inicio,
+          fecha_termino: e.fecha_termino,
+          sueldo: e.sueldo,
+          status: e.status,
+          nombre_carrera: e.nombre_carrera,
+          descripcion_tipo_estudiante: e.descripcion_tipo_estudiante,
+        }))
+      )
+      .then(setEstudiantes);
+
+    const eventsFetch = fetch(
+      `http://127.0.0.1:8000/gestion/api/deteventos/?investigador=${id}`
+    )
+      .then((r) => r.json())
+      .then((detArr: any[]) =>
+        Promise.all(
+          detArr.map((det) =>
+            fetch(`http://127.0.0.1:8000/gestion/api/eventos/${det.evento}/`)
+              .then((r) => r.json())
+              .then((ev) => ({
+                id: String(ev.id),
+                name: ev.nombre,
+                role: det.rol ?? "",
+                asunto: det.asunto ?? "",
+                date: ev.fecha,
+                location: ev.lugar,
+                duracion: ev.duracion,
+                empresa_invita: ev.empresa_invita,
+                tipo_evento_descripcion: ev.tipo_evento_descripcion,
+              }))
+          )
+        )
+      )
+      .then(setEventos);
+
+    Promise.all([general, artFetch, projFetch, studentsFetch, eventsFetch])
       .catch((err) => {
         console.error(err);
         setError("Error cargando perfil.");
@@ -190,11 +221,11 @@ export const InvestigadoresProfilePage: React.FC = () => {
     );
   }
 
-  const metrics = {
-    articles: investData.articles_count,
-    projects: investData.projects_count,
-    students: investData.students_count,
-    events: investData.events_count,
+  const metricas = {
+    Articulos: investData.articles_count,
+    Proyectos: investData.projects_count,
+    Estudiantes: investData.students_count,
+    Eventos: investData.events_count,
   };
 
   return (
@@ -202,22 +233,20 @@ export const InvestigadoresProfilePage: React.FC = () => {
       <div className="space-y-6">
         <div className="grid gap-6 md:grid-cols-[1fr_2fr]">
           <ProfileGeneralCard
-            name={`${investData.nombre} ${investData.apellido}`}
-            title={investData.titulo ?? ""}
-            department={investData.ubicacion ?? ""}
+            nombre={`${investData.nombre} ${investData.apellido}`}
+            titulo={investData.titulo ?? ""}
             snii={sniiDesc}
-            area={areas.join(", ")}
-            email={investData.correo}
-            phone={investData.telefono}
-            location={investData.ubicacion ?? ""}
-            avatarUrl={investData.avatar_url ?? "/placeholder.svg"}
+            correo={investData.correo}
+            telefono={investData.telefono}
+            ubicacion={investData.ubicacion ?? ""}
+            avatar={investData.avatar}
             onContact={() => {}}
           />
           <ProfileDetailsCard
             bio={investData.bio ?? ""}
-            metrics={metrics}
-            expertise={areas}
-            education={education}
+            metricas={metricas}
+            lineas={areas}
+            educacion={educacion}
           />
         </div>
 
@@ -228,39 +257,39 @@ export const InvestigadoresProfilePage: React.FC = () => {
         >
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="articles">Articles</TabsTrigger>
-            <TabsTrigger value="projects">Projects</TabsTrigger>
-            <TabsTrigger value="students">Students</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
+            <TabsTrigger value="articulos">Articulos</TabsTrigger>
+            <TabsTrigger value="proyectos">Proyectos</TabsTrigger>
+            <TabsTrigger value="estudiantes">Estudiantes</TabsTrigger>
+            <TabsTrigger value="eventos">Eventos</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
             <OverviewTab
-              articles={articles}
-              projects={projects}
-              onViewAllArticles={() => setActiveTab("articles")}
-              onViewAllProjects={() => setActiveTab("projects")}
+              articles={articulos}
+              projects={proyectos}
+              onViewAllArticles={() => setActiveTab("articulos")}
+              onViewAllProjects={() => setActiveTab("proyectos")}
             />
           </TabsContent>
 
-          <TabsContent value="articles">
-            <ArticlesTab articles={articles} />
+          <TabsContent value="articulos">
+            <ArticlesTab articles={articulos} />
           </TabsContent>
 
-          <TabsContent value="projects">
-            <ProjectsTab projects={projects} />
+          <TabsContent value="proyectos">
+            <ProjectsTab projects={proyectos} />
           </TabsContent>
 
-          {/* <TabsContent value="students">
+          <TabsContent value="estudiantes">
             <StudentsTab
-              students={researcher.students}
+              students={estudiantes}
               onViewProfile={(sid) => navigate(`/investigadores/${sid}`)}
             />
           </TabsContent>
 
-          <TabsContent value="events">
-            <EventsTab events={researcher.events} />
-          </TabsContent> */}
+          <TabsContent value="eventos">
+            <EventsTab events={eventos} />
+          </TabsContent>
         </Tabs>
       </div>
     </Layout>

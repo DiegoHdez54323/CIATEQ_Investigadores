@@ -19,7 +19,7 @@ class InvestigadorSerializer(serializers.ModelSerializer):
             "sueldo",
             "titulo",
             "ubicacion",
-            "avatar_url",
+            "avatar",
             "bio",
             "articles_count",
             "projects_count",

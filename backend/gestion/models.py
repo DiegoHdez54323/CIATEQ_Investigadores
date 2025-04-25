@@ -90,7 +90,7 @@ class Proyectos(models.Model):
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
-        default="Pending",
+        default="Pendiente",
     )
 
     class Meta:
@@ -120,7 +120,7 @@ class Investigador(models.Model):
 
     titulo = models.CharField(max_length=100, blank=True, null=True)
     ubicacion = models.CharField(max_length=200, blank=True, null=True)
-    avatar_url = models.URLField(blank=True, null=True)
+    avatar = models.CharField(max_length=200, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
 
     class Meta:

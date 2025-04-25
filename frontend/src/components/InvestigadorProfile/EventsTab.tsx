@@ -1,4 +1,3 @@
-// components/EventsTab.tsx
 import React from "react";
 import {
   Card,
@@ -13,9 +12,12 @@ export interface Event {
   id: string;
   name: string;
   role: string;
+  asunto: string;
   date: string;
   location: string;
-  topic: string;
+  duracion: number;
+  empresa_invita: string;
+  tipo_evento_descripcion: string;
 }
 
 interface EventsTabProps {
@@ -24,9 +26,9 @@ interface EventsTabProps {
 
 export const EventsTab: React.FC<EventsTabProps> = ({ events }) => (
   <Card>
-    <CardHeader>
-      <CardTitle>Academic Events</CardTitle>
-      <CardDescription>Conferences, workshops, and symposiums</CardDescription>
+    <CardHeader className="flex items-center justify-between">
+      <CardTitle>Eventos</CardTitle>
+      <CardDescription>Conferencias, talleres, simposios, etc.</CardDescription>
     </CardHeader>
     <CardContent>
       <div className="space-y-6">
@@ -40,14 +42,29 @@ export const EventsTab: React.FC<EventsTabProps> = ({ events }) => (
               </div>
               <div className="flex items-center">
                 <Calendar className="mr-2 h-4 w-4 text-indigo-600" />
-                <span>{e.date}</span>
+                <span>Date: {e.date}</span>
               </div>
               <div className="flex items-center">
                 <MapPin className="mr-2 h-4 w-4 text-indigo-600" />
-                <span>{e.location}</span>
+                <span>Location: {e.location}</span>
               </div>
             </div>
-            <p className="text-slate-600">{e.topic}</p>
+            <div className="space-y-1 text-sm mb-2">
+              <p>
+                <span className="font-medium">Duración:</span> {e.duracion} días
+              </p>
+              <p>
+                <span className="font-medium">Empresa invitante:</span>{" "}
+                {e.empresa_invita}
+              </p>
+              <p>
+                <span className="font-medium">Tipo de evento:</span>{" "}
+                {e.tipo_evento_descripcion}
+              </p>
+            </div>
+            <p className="text-slate-600">
+              <span className="font-medium">Asunto:</span> {e.asunto}
+            </p>
           </div>
         ))}
       </div>

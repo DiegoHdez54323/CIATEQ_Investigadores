@@ -1,4 +1,3 @@
-// components/OverviewTab.tsx
 import React from "react";
 import {
   Card,
@@ -44,8 +43,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
     {/* Recent Publications */}
     <Card>
       <CardHeader>
-        <CardTitle>Recent Publications</CardTitle>
-        <CardDescription>Latest research articles</CardDescription>
+        <CardTitle>Publicaciones Recientes</CardTitle>
+        <CardDescription>Últimos artículos de investigación.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -77,13 +76,13 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
     {/* Active Projects */}
     <Card>
       <CardHeader>
-        <CardTitle>Active Projects</CardTitle>
-        <CardDescription>Current research initiatives</CardDescription>
+        <CardTitle>Proyectos Activos</CardTitle>
+        <CardDescription>Iniciativas de investigación actuales</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {projects
-            .filter((p) => p.status === "Active")
+            .filter((p) => p.status === "Completado")
             .map((p) => (
               <div
                 key={p.id}

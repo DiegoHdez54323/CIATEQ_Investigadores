@@ -16,4 +16,6 @@ class DetEventosSerializer(serializers.ModelSerializer):
             "evento",
             "nombre_investigador",
             "nombre_evento",
+            "rol",
+            "asunto",
         ]
