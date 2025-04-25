@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { MoreVertical } from "lucide-react";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -9,18 +10,14 @@ function Login() {
     const [passwordError, setPasswordError] = useState("");
 
     useEffect(() => {
-        // Revisar si hay usuario guardado en localStorage
         const storedUser = localStorage.getItem("loggedUser");
         const storedRemindMe = localStorage.getItem("remindMe");
 
         if (storedUser && storedRemindMe === "true") {
-            // Si hay usuario y la opción "Recordar mi usuario" está activada
             setUsername(storedUser);
             setRemindMe(true);
-            // Redirigir directamente al dashboard
-            window.location.href = '/dashboard';  // Redirigir al dashboard si el usuario ya está autenticado
+            window.location.href = '/dashboard';
         } else {
-            // Si no, revisar en sessionStorage
             const tempUser = sessionStorage.getItem("tempUser");
             if (tempUser) {
                 setUsername(tempUser);
@@ -34,7 +31,6 @@ function Login() {
         setUsernameError("");
         setPasswordError("");
 
-        // Validaciones de campos vacíos
         if (!username) {
             setUsernameError("Ingrese su nombre de usuario");
             return;
@@ -55,21 +51,19 @@ function Login() {
             if (foundUser) {
                 console.log("Login exitoso:", foundUser);
 
-                // Guardar el rol del usuario en localStorage o sessionStorage
                 if (remindMe) {
                     localStorage.setItem("loggedUser", foundUser.username);
                     localStorage.setItem("remindMe", "true");
-                    localStorage.setItem("userRole", foundUser.role); // Guardamos el rol también
+                    localStorage.setItem("userRole", foundUser.role);
                 } else {
                     sessionStorage.setItem("tempUser", foundUser.username);
-                    sessionStorage.setItem("userRole", foundUser.role); // Guardamos el rol también
+                    sessionStorage.setItem("userRole", foundUser.role);
                     localStorage.removeItem("loggedUser");
                     localStorage.removeItem("remindMe");
                     localStorage.removeItem("userRole");
                 }
 
-                // Redirigir al dashboard, sin importar si es admin o no
-                window.location.href = '/dashboard'; // Redirige siempre al dashboard
+                window.location.href = '/dashboard';
             } else {
                 setErrorMsg("Credenciales inválidas");
             }
@@ -119,9 +113,7 @@ function Login() {
                         <input
                             type="checkbox"
                             className="w-5 h-5 text-[#92283f] border-gray-500 rounded focus:ring-[#92283f]"
-                            onChange={(e) => {
-                                setRemindMe(!remindMe);
-                            }}
+                            onChange={() => setRemindMe(!remindMe)}
                             checked={remindMe}
                         />
                         <span className="text-gray-700">Recordar mi usuario</span>
@@ -134,6 +126,16 @@ function Login() {
                     </button>
                 </form>
                 {errorMsg && <p className="text-red-500 text-center">{errorMsg}</p>}
+            </div>
+
+            {/* Botón flotante de opciones */}
+            <div className="fixed bottom-4 w-full flex justify-end mr-4">
+                <button
+                    className="flex items-end justify-end p-3 bg-[#92283f] text-white rounded-full shadow-lg hover:bg-[#701d2f] transition"
+                    onClick={() => window.location.href='/ciateqdb'}
+                >
+                    <MoreVertical size={24} />
+                </button>
             </div>
         </div>
     );
