@@ -1,0 +1,19 @@
+[Unit]
+Description=Gunicorn for the Django example project
+After=network.target
+
+[Service]
+Type=simple
+
+User=vboxuser
+
+RuntimeDirectory=gunicorn_example
+WorkingDirectory=/home/vboxuser/CIATEQ_Investigadores/backend
+ExecStart=/home/vboxuser/CIATEQ_Investigadores/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 main.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
