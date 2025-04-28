@@ -23,6 +23,7 @@ class EstudiantesSerializer(serializers.ModelSerializer):
             "fecha_termino",
             "sueldo",
             "nombre",
+            "status",
             "nombre_investigador",
             "nombre_carrera",
             "descripcion_tipo_estudiante",

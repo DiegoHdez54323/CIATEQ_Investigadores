@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import List, { Column } from "../components/List";
 import useCrudActions from "../hooks/useCrudActions";
@@ -31,30 +32,25 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
   ordering,
   toggleOrdering,
 }) => {
+  const navigate = useNavigate();
+
   // verifica si la sesion está iniciada, si no redirige a login
   const isLoggedIn =
     localStorage.getItem("loggedUser") || sessionStorage.getItem("tempUser");
   if (!isLoggedIn) {
     alert("Inicia sesión para acceder a esta página.");
-    window.location.href = "/login"; // Redirigir a otra página
+    window.location.href = "/login";
   }
 
-  // Estado para controlar si el usuario es administrador
+  // Estado admin
   const [isAdmin, setIsAdmin] = useState(false);
-
-  // Verificar el rol del usuario cuando el componente se monta
   useEffect(() => {
-    const userRole = localStorage.getItem("userRole");
-    const sesionRole = sessionStorage.getItem("userRole");
-    setIsAdmin(userRole === "admin" || sesionRole == "admin");
+    const role =
+      localStorage.getItem("userRole") || sessionStorage.getItem("userRole");
+    setIsAdmin(role === "admin");
   }, []);
 
-  
-
-  // Construimos la URL dinámica con el parámetro de ordenación
-  const apiUrl = buildUrl(BASE_API_URL, { ordering: ordering });
-
-  // Usamos el hook de CRUD pasándole la URL dinámica
+  const apiUrl = buildUrl(BASE_API_URL, { ordering });
   const {
     data: investigadores,
     loading,
@@ -67,18 +63,14 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
     setEditingItem,
     handleEdit,
   } = useCrudActions<Investigador>(apiUrl);
-
   const { openModal, closeModal } = useModal();
 
-  // Re-fetch cada vez que cambia la ordenación
   useEffect(() => {
     fetchData();
   }, [ordering]);
 
   const handleNew = () => {
-    // Solo permitir si el usuario es admin
     if (!isAdmin) return;
-
     setEditingItem(null);
     openModal(
       <InvestigadorForm
@@ -94,9 +86,7 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
   };
 
   const handleEditModal = (item: Investigador) => {
-    // Solo permitir si el usuario es admin
     if (!isAdmin) return;
-
     setEditingItem(item);
     openModal(
       <InvestigadorForm
@@ -111,7 +101,6 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
     );
   };
 
-  // Definición de columnas: en "ID" y "Sueldo" agregamos botones para ordenar
   const columns: Column<Investigador>[] = [
     {
       header: (
@@ -159,84 +148,90 @@ const InvestigadoresPage: React.FC<InvestigadoresPageProps> = ({
             </button>
           )}
         </div>
+
         {loading ? (
           <p>Cargando...</p>
         ) : error ? (
           <p className="text-red-600">Error: {error}</p>
         ) : (
-          // Mostrar cartas investigadores.
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {investigadores.map((investigador) => (
+            {investigadores.map((inv) => (
               <div
-                key={investigador.id}
-                className="bg-white shadow-md rounded-lg p-4 flex items-start space-x-4 transform transition-transform duration-200 hover:scale-105"
+                key={inv.id}
+                className="bg-white shadow-md rounded-lg p-4 flex items-start space-x-4 transform transition-transform duration-200 hover:scale-105 cursor-pointer"
+                onClick={() => navigate(`/investigadores/${inv.id}`)}
               >
-                {/* Icono de perfil */}
                 <img
                   src="https://www.gravatar.com/avatar/?d=mp&s=64"
                   alt="Foto de perfil"
                   className="w-16 h-16 rounded-full object-cover"
                 />
-                {/* Info del investigador */}
                 <div className="flex-1 min-w-0 space-y-1">
-                  {/* Nombre completo */}
                   <h3
-                    className="text-lg font-bold text-gray-900 mb-1 truncate transition-transform duration-200 hover:scale-105 cursor-pointer"
-                    title={`${investigador.nombre} ${investigador.apellido}`}
-                    onClick={() =>
-                      navigator.clipboard.writeText(`${investigador.nombre} ${investigador.apellido}`)
-                    }
+                    className="text-lg font-bold text-gray-900 mb-1 truncate"
+                    title={`${inv.nombre} ${inv.apellido}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(
+                        `${inv.nombre} ${inv.apellido}`
+                      );
+                    }}
                   >
-                    {`${investigador.nombre} ${investigador.apellido}`}
+                    {`${inv.nombre} ${inv.apellido}`}
                   </h3>
-
-                  {/* Teléfono */}
                   <p
-                    className="text-sm text-gray-600 truncate transition-transform duration-200 hover:scale-105 cursor-pointer"
-                    title={investigador.telefono}
-                    onClick={() => navigator.clipboard.writeText(investigador.telefono)}
+                    className="text-sm text-gray-600 truncate"
+                    title={inv.telefono}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(inv.telefono);
+                    }}
                   >
                     <span className="font-medium">Teléfono:</span>{" "}
-                    {investigador.telefono}
+                    {inv.telefono}
                   </p>
-
-                  {/* Correo */}
                   <p
-                    className="text-sm text-gray-600 truncate transition-transform duration-200 hover:scale-105 cursor-pointer"
-                    title={investigador.correo}
-                    onClick={() => navigator.clipboard.writeText(investigador.correo)}
+                    className="text-sm text-gray-600 truncate"
+                    title={inv.correo}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(inv.correo);
+                    }}
                   >
-                    <span className="font-medium">Correo:</span>{" "}
-                    {investigador.correo}
+                    <span className="font-medium">Correo:</span> {inv.correo}
                   </p>
-
-                  {/* Sueldo */}
                   <p
-                    className="text-sm text-gray-600 truncate transition-transform duration-200 hover:scale-105 cursor-pointer"
-                    title={investigador.sueldo.toString()}
-                    onClick={() =>
-                      navigator.clipboard.writeText(investigador.sueldo.toString())
-                    }
+                    className="text-sm text-gray-600 truncate"
+                    title={inv.sueldo.toString()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(inv.sueldo.toString());
+                    }}
                   >
-                    <span className="font-medium">Sueldo:</span> ${investigador.sueldo}
+                    <span className="font-medium">Sueldo:</span> ${inv.sueldo}
                   </p>
 
-                  {/* Botones si es admin */}
                   {isAdmin && (
                     <div className="mt-2 flex gap-2">
                       <button
-                        onClick={() => {
-                          handleEdit(investigador);
-                          handleEditModal(investigador);
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(inv);
+                          handleEditModal(inv);
                         }}
                         className="text-blue-600 hover:underline text-sm"
                       >
                         Editar
                       </button>
                       <button
-                        onClick={() => {
-                          if (window.confirm("¿Estás seguro de eliminar este investigador?")) {
-                            remove(investigador.id);
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (
+                            window.confirm(
+                              "¿Estás seguro de eliminar este investigador?"
+                            )
+                          ) {
+                            remove(inv.id);
                           }
                         }}
                         className="text-red-600 hover:underline text-sm"

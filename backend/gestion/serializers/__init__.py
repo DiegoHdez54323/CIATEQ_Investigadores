@@ -16,3 +16,6 @@ from .tipo_estudiante_serializer import TipoEstudianteSerializer
 from .carreras_serializer import CarrerasSerializer
 from .estudiantes_serializer import EstudiantesSerializer
 from .usuarios_serializer import UsuariosSerializer
+from .educacion_serializer import EducacionSerializer
+from .materia_serializer import MateriaSerializer
+from .det_materia_serializer import DetMateriaSerializer

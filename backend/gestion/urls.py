@@ -20,6 +20,9 @@ from gestion.views import (
     EstudiantesViewSet,
     UsuariosViewSet,
     dashboard_data,
+    EducacionViewSet,
+    MateriaViewSet,
+    DetMateriaViewset,
     UploadSeeder
 )
 
@@ -43,6 +46,9 @@ router.register(r"carreras", CarrerasViewSet)
 router.register(r"tipoestudiante", TipoEstudianteViewSet)
 router.register(r"estudiantes", EstudiantesViewSet)
 router.register(r"usuarios", UsuariosViewSet)
+router.register(r"educacion", EducacionViewSet)
+router.register(r"materia", MateriaViewSet)
+router.register(r"detmateria", DetMateriaViewset)
 router.register(r"upload_seeder", UploadSeeder, basename="upload_seeder")
 
 

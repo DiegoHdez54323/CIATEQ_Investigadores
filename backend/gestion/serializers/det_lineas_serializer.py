@@ -16,6 +16,7 @@ class DetLineasSerializer(serializers.ModelSerializer):
             "id",
             "investigador",
             "linea",
+            "reconocido",
             "nombre_investigador",
             "descripcion_linea",
         ]

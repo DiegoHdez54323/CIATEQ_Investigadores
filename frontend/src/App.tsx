@@ -27,6 +27,8 @@ import DetHerrPage from "./pages/DetHerrPage";
 import Login from "./pages/Login";
 import CiateqDb from "./pages/CiateqDb";
 
+import InvestigadoresProfilePage from "./pages/InvestigadoresProfilePage";
+
 function App() {
   return (
     <Router>
@@ -42,6 +44,10 @@ function App() {
         <Route path="/nivelsnii" element={<NivelSniiPage />} />
         <Route path="/tipoestudiante" element={<TipoEstudiantePage />} />
         <Route path="/investigadores" element={<InvestigadoresPage />} />
+        <Route
+          path="/investigadores/:id"
+          element={<InvestigadoresProfilePage />}
+        />
         <Route path="/snii" element={<SniiPage />} />
         <Route path="/eventos" element={<EventosPage />} />
         <Route path="/estudiantes" element={<EstudiantesPage />} />
