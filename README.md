@@ -54,7 +54,7 @@ source env/bin/activate  # o env\Scripts\activate en Windows
 pip install -r requirements.txt
 ```
 
-3. Configurar la base de datos en `backend/main/settings.py` según tus credenciales locales:
+3. Configurar la base de datos en backend/main/settings.py según tus credenciales locales:
 
 ```python
 DATABASES = {
@@ -75,38 +75,42 @@ DATABASES = {
 python manage.py migrate
 ```
 
-5. Crear los archivos para comandos personalizados:
-En la carpeta de tu aplicación Django, crea las siguientes carpetas y archivos:
-
-```bash
-app/
-└── management/
-    └── commands/
-        └── seed_data.py
-    └── __init__.py
-└── __init__.py
-```
-
-El script del seeder se encuentra en la ruta raiz del projecto, y lleva el nombre de `seed_data.py`
-
-6. Ejecutar el comando para sembrar los datos iniciales:
-
-```bash
-python manage.py seed_data
-```
-
-7. Iniciar el servidor backend:
+4. Iniciar el servidor backend:
 
 ```bash
 cd backend
 python manage.py runserver
 ```
-
-8. La API estará disponible en:
-
-```
+La API estará disponible en:
+```bash
 http://127.0.0.1:8000/
 ```
+
+### 🛠️ Cargar Datos Iniciales (Seed Data)
+
+1. Correr el backend y el frontend: Asegúrate de que tanto el servidor del backend como el del frontend estén en funcionamiento.
+
+2. Acceder a la página principal: Abre tu navegador y ve a la página principal de la aplicación:
+
+```bash
+http://localhost:5173/
+```
+
+3. Subir el archivo seed_data.py:
+
+4. En la página principal, verás un botón en la parte inferior derecha.
+
+5. Al hacer clic en este botón, serás redirigido a una página para cargar el archivo de datos.
+
+6. En esta nueva página, presiona el botón Browse y selecciona el archivo llamado seed_data.py.
+
+> **Importante:** Si el archivo no tiene el formato adecuado para la base de datos, no se permitirá ejecutar el script. Asegúrate de que el archivo esté correctamente formateado.
+
+BASE DE DATOS PARA PRUEBAS EN LINEA:
+HOST: `db-ciateq.ctam4gw68b95.us-east-1.rds.amazonaws.com`
+USER: `postgres`
+PASSWORD: `postgres`
+
 
 ---
 

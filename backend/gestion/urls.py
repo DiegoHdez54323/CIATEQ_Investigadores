@@ -23,6 +23,7 @@ from gestion.views import (
     EducacionViewSet,
     MateriaViewSet,
     DetMateriaViewset,
+    UploadSeeder
 )
 
 
@@ -48,6 +49,7 @@ router.register(r"usuarios", UsuariosViewSet)
 router.register(r"educacion", EducacionViewSet)
 router.register(r"materia", MateriaViewSet)
 router.register(r"detmateria", DetMateriaViewset)
+router.register(r"upload_seeder", UploadSeeder, basename="upload_seeder")
 
 
 urlpatterns = [

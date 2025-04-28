@@ -20,3 +20,4 @@ from .dashboard_view import dashboard_data
 from .educacion_viewset import EducacionViewSet
 from .materia_viewset import MateriaViewSet
 from .det_materia_viewset import DetMateriaViewset
+from .upload_seeder import UploadSeeder

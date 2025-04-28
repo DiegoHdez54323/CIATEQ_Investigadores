@@ -25,6 +25,7 @@ import DetLineasPage from "./pages/DetLineasPage";
 import DetProyPage from "./pages/DetProyPage";
 import DetHerrPage from "./pages/DetHerrPage";
 import Login from "./pages/Login";
+import CiateqDb from "./pages/CiateqDb";
 
 import InvestigadoresProfilePage from "./pages/InvestigadoresProfilePage";
 
@@ -56,6 +57,7 @@ function App() {
         <Route path="/detproy" element={<DetProyPage />} />
         <Route path="/detherr" element={<DetHerrPage />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/ciateqdb" element={<CiateqDb />} />
       </Routes>
     </Router>
   );
