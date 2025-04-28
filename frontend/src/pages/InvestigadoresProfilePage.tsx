@@ -29,6 +29,11 @@ import {
 } from "../components/InvestigadorProfile/StudentsTab";
 import { EventsTab, Event } from "../components/InvestigadorProfile/EventsTab";
 
+import {
+  ScoreSection,
+  ScoreData,
+} from "../components/InvestigadorProfile/ScoreSection";
+
 type Tab = "overview" | "articulos" | "proyectos" | "estudiantes" | "eventos";
 
 interface InvestigadorData {
@@ -60,6 +65,10 @@ export const InvestigadoresProfilePage: React.FC = () => {
   const [proyectos, setProyectos] = useState<Project[]>([]);
   const [estudiantes, setEstudiantes] = useState<Student[]>([]);
   const [eventos, setEventos] = useState<Event[]>([]);
+
+  const [scoreData, setScoreData] = useState<ScoreData | null>(null);
+  const [loadingScore, setLoadingScore] = useState<boolean>(true);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -198,7 +207,22 @@ export const InvestigadoresProfilePage: React.FC = () => {
       )
       .then(setEventos);
 
-    Promise.all([general, artFetch, projFetch, studentsFetch, eventsFetch])
+    // Score
+    const scoreFetch = fetch(
+      `http://127.0.0.1:8000/gestion/api/investigadores/${id}/score/`
+    )
+      .then((r) => r.json())
+      .then(setScoreData)
+      .finally(() => setLoadingScore(false));
+
+    Promise.all([
+      general,
+      artFetch,
+      projFetch,
+      studentsFetch,
+      eventsFetch,
+      scoreFetch,
+    ])
       .catch((err) => {
         console.error(err);
         setError("Error cargando perfil.");
@@ -291,6 +315,8 @@ export const InvestigadoresProfilePage: React.FC = () => {
             <EventsTab events={eventos} />
           </TabsContent>
         </Tabs>
+        {/* Sección de Score */}
+        {scoreData && <ScoreSection data={scoreData} loading={loadingScore} />}
       </div>
     </Layout>
   );

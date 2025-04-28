@@ -4,6 +4,14 @@
 # ============ 1. Modelos base (sin dependencias) ============
 
 
+class Materia(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        db_table = "materias"
+
+
 class Carreras(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(unique=True, max_length=100)
@@ -67,6 +75,16 @@ class Articulos(models.Model):
     resumen = models.TextField(blank=True, null=True)
     citados = models.IntegerField(default=0)
 
+    STATUS_CHOICES = [
+        ("EnProceso", "En proceso"),
+        ("Terminado", "Terminado"),
+        ("Aceptado", "Aceptado en revista"),
+        ("Publicado", "Publicado"),
+    ]
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default="EnProceso"
+    )
+
     class Meta:
         db_table = "articulos"
 
@@ -81,11 +99,9 @@ class Proyectos(models.Model):
     descripcion = models.TextField(blank=True, null=True)
 
     STATUS_CHOICES = [
-        ("Pendiente", "Pendiente"),
-        ("Activo", "Activo"),
-        ("Pausado", "Pausado"),
-        ("Completado", "Completado"),
-        ("Cancelado", "Cancelado"),
+        ("Proceso", "En proceso"),
+        ("Terminado", "Terminado"),
+        ("Instalado", "Instalado en sitio"),
     ]
     status = models.CharField(
         max_length=10,
@@ -164,12 +180,13 @@ class Estudiante(models.Model):
     STATUS_CHOICES = [
         ("Activo", "Activo"),
         ("Abandonó", "Abandonó"),
-        ("Graduado", "Graduado"),
+        ("Egresado", "Egresado"),
+        ("Titulado", "Titulado"),
     ]
     status = models.CharField(
         max_length=50,
         choices=STATUS_CHOICES,
-        default="Active",
+        default="Activo",
     )
 
     class Meta:
@@ -230,6 +247,7 @@ class DetLineas(models.Model):
     id = models.AutoField(primary_key=True)
     investigador = models.ForeignKey(Investigador, on_delete=models.CASCADE)
     linea = models.ForeignKey(Lineas, on_delete=models.CASCADE)
+    reconocido = models.BooleanField(default=False)
 
     class Meta:
         db_table = "det_lineas"
@@ -245,3 +263,13 @@ class DetProy(models.Model):
     class Meta:
         db_table = "det_proy"
         unique_together = (("investigador", "proyecto"),)
+
+
+class DetMateria(models.Model):
+    id = models.AutoField(primary_key=True)
+    investigador = models.ForeignKey(Investigador, on_delete=models.CASCADE)
+    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "det_materia"
+        unique_together = (("investigador", "materia"),)

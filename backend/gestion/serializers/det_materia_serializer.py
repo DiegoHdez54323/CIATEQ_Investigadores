@@ -1,19 +1,19 @@
 from rest_framework import serializers
-from gestion.models import Educacion
+from gestion.models import DetMateria
 
 
-class EducacionSerializer(serializers.ModelSerializer):
+class DetMateriaSerializer(serializers.ModelSerializer):
     nombre_investigador = serializers.CharField(
         source="investigador.nombre", read_only=True
     )
+    nombre_materia = serializers.CharField(source="materia.nombre", read_only=True)
 
     class Meta:
-        model = Educacion
+        model = DetMateria
         fields = [
             "id",
             "investigador",
+            "materia",
             "nombre_investigador",
-            "grado",
-            "institucion",
-            "anio",
+            "nombre_materia",
         ]
