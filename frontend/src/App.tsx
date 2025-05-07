@@ -58,6 +58,7 @@ function App() {
         <Route path="/detherr" element={<DetHerrPage />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
         <Route path="/ciateqdb" element={<CiateqDb />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );

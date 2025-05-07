@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, Settings } from "lucide-react";
+
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -87,6 +88,14 @@ function Login() {
 
   return (
     <div className="relative flex items-center justify-center h-screen bg-gradient-to-r from-[#f0f0f0] to-[#d3d3d3]">
+      <button
+        onClick={() => (window.location.href = "/ciateqdb")}
+        className="fixed bottom-4 right-4 p-3 bg-white rounded-full shadow-lg hover:bg-[#f5f5f5] transition z-40"
+        title="Ir a CIATEQ DB"
+      >
+        <Settings className="w-6 h-6 text-[#92283f]" />
+      </button>
+
       <div className="absolute top-10 flex justify-center w-full z-20">
         <img src="/ciateq.png" alt="CIATEQ Logo" className="h-24" />
       </div>

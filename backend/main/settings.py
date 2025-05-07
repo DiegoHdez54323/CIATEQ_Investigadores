@@ -88,7 +88,7 @@ DATABASES = {
         "NAME": "ciateq_investigadores_django",
         "USER": "postgres",
         "PASSWORD": "postgres",
-        "HOST": "localhost",
+        "HOST": "127.0.0.1",
         "PORT": "5432",
     }
 }
